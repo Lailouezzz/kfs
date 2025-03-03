@@ -1,0 +1,33 @@
+
+unexport SUBDIRS
+unexport O_TARGET
+unexport O_OBJS
+unexport PHONY
+
+%.s: %.S
+	$(CPP) -o $@ $<
+
+%.o: %.s
+	$(AS) $(ASFLAGS) -o $@ $<
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+PHONY += first_rule
+first_rule: subdirs
+	$(MAKE) all_targets
+
+PHONY += all_targets
+all_targets: $(O_TARGET)
+
+ifdef O_TARGET
+ALL_O := $(O_OBJS)
+$(O_TARGET): $(ALL_O)
+	$(LD) $(LDFLAGS) -r -o $@ $(ALL_O)
+endif
+
+PHONY += subdirs
+subdirs:
+	set -e; for i in $(SUBDIRS); do $(MAKE) -C $$i; done
+
+.PHONY: $(PHONY)
