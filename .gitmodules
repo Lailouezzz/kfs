@@ -1,0 +1,3 @@
+[submodule "thirdparty/grub"]
+	path = thirdparty/grub
+	url = https://git.savannah.gnu.org/git/grub.git

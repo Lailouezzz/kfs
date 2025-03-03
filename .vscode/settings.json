@@ -1,0 +1,6 @@
+{
+	"files.associations": {
+		"apm_bios.h": "c",
+		"audit.h": "c"
+	}
+}
