@@ -21,6 +21,21 @@ PHONY += all
 all: subdirs
 	$(MAKE) kfs
 
+PHONY += clean
+clean:
+	CLEAN_OBJS=1 $(MAKE) subdirs
+
+PHONY += fclean
+fclean: clean
+	$(RM) kfs
+
+PHONY += mrproper
+mrproper: clean
+	$(RM) Makefile.cfg
+
+PHONY += re
+re: fclean all
+
 # Exported global variables
 include Makefile.cfg
 Makefile.cfg:
@@ -29,9 +44,8 @@ Makefile.cfg:
 include Makefile.vars
 
 # K_LDSCRIPT is defined in the architecture directory
-PHONY += kfs
 kfs: $(K_OBJS) $(K_LDSCRIPT)
-	$(LD) $(KLDFLAGS) -T $(K_LDSCRIPT) $(K_OBJS) -nostdlib -o kfs
+	$(LD) $(KLDFLAGS) -T $(K_LDSCRIPT) -nostdlib -o $@ $(K_OBJS)
 
 include Makefile.rules
 
