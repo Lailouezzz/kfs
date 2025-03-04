@@ -5,7 +5,7 @@ unexport O_OBJS
 unexport PHONY
 
 %.s: %.S
-	$(CPP) $(CPPFLAGS) -o $@ $<
+	$(CPP) $(CPPFLAGS) -D__ASSEMBLY__ -o $@ $<
 
 # delete predefined rule
 %.o: %.S
