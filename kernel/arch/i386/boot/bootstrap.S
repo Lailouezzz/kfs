@@ -1,12 +1,15 @@
+#include <multiboot.h>
+
 global _start
-extern early_main
+extern arch_main
 
 bits 32
 section .bootstrap
 _start:
 	cli
-	cmp eax, 0x36d76289
-	je early_main
-	hlt
+	push eax
+	push ebx
+	call arch_main
 .1:
+	hlt
 	jmp .1
