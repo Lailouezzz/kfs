@@ -1,17 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   memcpy.c                                           :+:      :+:    :+:   */
+/*   string.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 18:55:22 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/04 18:55:38 by amassias         ###   ########.fr       */
+/*   Created: 2025/03/04 19:35:33 by ale-boud          #+#    #+#             */
+/*   Updated: 2025/03/04 19:35:34 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	memcpy(void *dst, void *src, unsigned long size)
-{
-	while (size--)
-		*(unsigned char *)dst++ = *(unsigned char *)src++;
-}

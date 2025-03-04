@@ -1,17 +1,13 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   memset.c                                           :+:      :+:    :+:   */
+/*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 18:55:51 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/04 18:56:04 by amassias         ###   ########.fr       */
+/*   Created: 2025/03/04 19:24:44 by ale-boud          #+#    #+#             */
+/*   Updated: 2025/03/04 19:26:57 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void memset(void *dst, int c, unsigned long size)
-{
-	while (size--)
-		*(unsigned char *)dst++ = c;
-}
+#include <asm/types.h>

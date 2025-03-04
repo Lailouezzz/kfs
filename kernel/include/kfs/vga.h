@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   vga.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 18:53:39 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/04 19:29:02 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/04 19:32:36 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef  VGA_H
-# define VGA_H
+#ifndef  KFS_VGA_H
+# define KFS_VGA_H
 
 void	vga_setup(void);
 

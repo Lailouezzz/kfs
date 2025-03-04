@@ -1,6 +1,6 @@
 #include <multiboot.h>
 
-#include <vga.h>
+#include <kfs/vga.h>
 
 /**
  * @brief The arch main entry in the higher half
