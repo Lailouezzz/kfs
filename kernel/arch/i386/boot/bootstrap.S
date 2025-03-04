@@ -1,14 +1,12 @@
 global _start
-extern phys_kernel_start
-extern phys_kernel_end
-extern strlen
+extern early_main
 
 bits 32
 section .bootstrap
 _start:
+	cli
 	cmp eax, 0x36d76289
-	call strlen
-	je multiboot_valid
+	je early_main
 	hlt
-multiboot_valid:
-	jmp multiboot_valid
+.1:
+	jmp .1
