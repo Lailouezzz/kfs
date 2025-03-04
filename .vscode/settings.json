@@ -1,6 +1,23 @@
 {
 	"files.associations": {
 		"apm_bios.h": "c",
-		"audit.h": "c"
+		"audit.h": "c",
+		"expected": "c",
+		"optional": "c",
+		"ratio": "c",
+		"array": "c",
+		"functional": "c",
+		"regex": "c",
+		"tuple": "c",
+		"type_traits": "c",
+		"utility": "c",
+		"*.inc": "c",
+		"*.tcc": "c",
+		"charconv": "c",
+		"chrono": "c",
+		"format": "c",
+		"system_error": "c",
+		"cstdint": "c",
+		"*.x": "c"
 	}
 }

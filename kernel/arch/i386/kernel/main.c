@@ -1,6 +1,6 @@
 #include <multiboot.h>
 
-void test_caca(void);
+#include <vga.h>
 
 /**
  * @brief The arch main entry in the higher half
@@ -8,9 +8,14 @@ void test_caca(void);
  * @param mb_info multiboot2 info
  * @param magic multiboot magic
  */
-void	arch_main(struct multiboot_info *mb_info, unsigned int magic) {
+void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
+{
+	(void)mb_info;
 	if (magic != MULTIBOOT2_BOOTLOADER_MAGIC) {
 
 	}
-	test_caca();
+	vga_setup();
+	vga_print_string("Hello world !");
+	vga_print_char('\n');
+	vga_print_string_c("Colored kernel baby hehe", 0x04);
 }
