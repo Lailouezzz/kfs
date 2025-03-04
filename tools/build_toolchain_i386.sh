@@ -4,6 +4,8 @@ export PREFIX="$HOME/opt/cross"
 export TARGET=i386-elf
 export PATH="$PREFIX/bin:$PATH"
 
+mkdir build-toolchain && cd build-toolchain
+
 wget https://ftp.gnu.org/gnu/gdb/gdb-16.2.tar.gz
 wget https://ftp.gnu.org/gnu/gcc/gcc-14.2.0/gcc-14.2.0.tar.gz
 wget https://ftp.gnu.org/gnu/binutils/binutils-2.44.tar.gz
