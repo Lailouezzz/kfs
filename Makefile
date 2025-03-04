@@ -18,7 +18,7 @@ bonus: all
 PHONY += clean
 clean:
 	$(call rmsg,Cleaning kernel dir and removing iso root directory)
-	$(call qcmd,$(MAKE) -C $(K_DIR) mrproper) || true
+	$(call qcmd,$(MAKE) -C $(K_DIR) fclean) || true
 	$(call qcmd,$(RM) -r $(ISO_ROOT_DIR))
 
 PHONY += fclean
@@ -28,6 +28,12 @@ fclean: clean
 
 PHONY += re
 re: fclean all
+
+run-qemu: $(ISO)
+	qemu-system-i386 -cdrom kfsos.iso -boot d
+
+run-qemu-debug: $(ISO)
+	qemu-system-i386 -cdrom kfsos.iso -boot d -S -s
 
 # Include vars and msg module
 include Makefile.vars Makefile.msg
@@ -51,8 +57,6 @@ $(ISO): $(K_BIN) $(GRUB_CFG)
 	$(call qcmd,cp $(GRUB_CFG) $(ISO_ROOT_DIR)/boot/grub)
 	grub-file --is-x86-multiboot2 $(ISO_ROOT_DIR)/boot/vmkfs
 	grub-mkrescue -o $(ISO) $(ISO_ROOT_DIR)
-
-
 
 # ---
 # Check configuration
