@@ -6,7 +6,7 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 18:56:25 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/04 19:14:54 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/04 19:28:55 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,25 @@ void	vga_setup(void)
 	get_video_address();
 }
 
+void	vga_move_cursor(int x, int y)
+{
+	if (x < 0) x = 0;
+	if (y < 0) y = 0;
+	if (x >= WIDTH) x = WIDTH - 1;
+	if (y >= HEIGHT) y = HEIGHT - 1;
+
+	cx = x;
+	cy = y;
+
+	unsigned short pos = y * WIDTH + x;
+
+	outb(0x0F, 0x3D4);
+	outb((unsigned char) (pos & 0xFF), 0x3D5);
+	outb(0x0E, 0x3D4);
+	outb((unsigned char) ((pos >> 8) & 0xFF), 0x3D5);
+}
+
+
 int	vga_print_char_c(char c, int color)
 {
 	if (c != '\n')
@@ -92,6 +111,7 @@ int	vga_print_char_c(char c, int color)
 			WIDTH * sizeof(short)
 		);
 	}
+	vga_move_cursor(cx, cy);
 	return (1);
 }
 
