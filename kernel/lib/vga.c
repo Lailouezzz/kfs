@@ -3,14 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   vga.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 18:56:25 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/04 19:36:42 by ale-boud         ###   ########.fr       */
+/*   Updated: 2025/03/04 19:51:24 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// TODO: Cursor manipulations
 
 // ************************************************************************** //
 // *                                                                        * //
@@ -55,7 +53,8 @@ static unsigned short	*video;
 // *                                                                        * //
 // ************************************************************************** //
 
-static void	get_video_address(void);
+static
+void	get_video_address(void);
 
 // ************************************************************************** //
 // *                                                                        * //
@@ -166,7 +165,8 @@ int	vga_print_bits(char v)
 // *                                                                        * //
 // ************************************************************************** //
 
-static void	get_video_address(void)
+static
+void	get_video_address(void)
 {
 	outb(0x06, 0x3CE);
 	const unsigned char mgr = inb_p(0x3CF);

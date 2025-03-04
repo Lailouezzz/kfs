@@ -3,11 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 19:24:44 by ale-boud          #+#    #+#             */
-/*   Updated: 2025/03/04 19:26:57 by ale-boud         ###   ########.fr       */
+/*   Updated: 2025/03/04 19:44:48 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <asm/types.h>
+
+#define NULL ((void *)0)
