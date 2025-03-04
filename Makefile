@@ -45,6 +45,7 @@ include Makefile.vars Makefile.msg
 PHONY += all-kfsos
 all-kfsos: $(ISO)
 
+PHONY += $(K_BIN)
 $(K_BIN): $(K_DIR)/Makefile.cfg
 	$(call bcmd,make,-C $(K_DIR),$(MAKE) -C $(K_DIR))
 
@@ -66,4 +67,4 @@ Makefile.cfg:
 	$(call emsg,Makefile.cfg missing did you "./configure")
 	@exit 1
 
-.PHONY: all bonus
+.PHONY: $(PHONY)
