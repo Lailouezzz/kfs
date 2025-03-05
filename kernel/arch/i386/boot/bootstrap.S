@@ -45,4 +45,5 @@ bootstrap_pte:
 .align 16
 kernel_stack_bottom:
 	.skip KERNEL_STACK_SIZE
+.global kernel_stack_top
 kernel_stack_top:

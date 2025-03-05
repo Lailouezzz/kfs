@@ -19,7 +19,7 @@ void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 	}
 	init_gdt();
 	vga_setup();
-	vga_print_string("Hello world !");
+	vga_print_string("42");
 	vga_print_char('\n');
 	vga_print_string_c("Colored kernel baby hehe", 0x04);
 	vga_move_cursor(7, 7);

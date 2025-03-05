@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 18:56:25 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/05 11:21:46 by ale-boud         ###   ########.fr       */
+/*   Updated: 2025/03/05 15:26:33 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	vga_setup(void)
 {
 	get_video_address();
 	vga_clear_screen();
-
+	vga_enable_cursor(13, 13);
 }
 
 void	vga_move_cursor(int x, int y)
@@ -90,9 +90,20 @@ void	vga_move_cursor(int x, int y)
 
 void	vga_clear_screen(void)
 {
-	memset(video, 0, WIDTH * HEIGHT * sizeof(unsigned short));
+	for (int k = 0; k < WIDTH * HEIGHT; ++k) {
+		video[k] = 0x0F00;
+	}
 	vga_move_cursor(0, 0);
 }
+
+void vga_enable_cursor(char cursor_start, char cursor_end)
+{
+	outb(0x0A, 0x3D4);
+	outb((inb(0x3D5) & 0xC0) | cursor_start, 0x3D5);
+	outb(0x0B, 0x3D4);
+	outb((inb(0x3D5) & 0xE0) | cursor_end, 0x3D5);
+}
+
 
 int	vga_print_char_c(char c, int color)
 {
