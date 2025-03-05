@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   printk.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Antoine Massias <massias.antoine.pro@gm    +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:22:18 by Antoine Mas       #+#    #+#             */
-/*   Updated: 2025/03/05 14:31:44 by Antoine Mas      ###   ########.fr       */
+/*   Updated: 2025/03/05 17:36:44 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,6 @@ int	_print_hex(
 		)
 {
 	if (n > 9)
-		return (_print_int(n / 16) + vga_print_char('0' + (n % 16)));
-	return (vga_print_char('0' + (n % 16)));
+		return (_print_hex(n / 16) + vga_print_char("0123456789QBCDEF"[n % 16]));
+	return (vga_print_char("0123456789QBCDEF"[n % 16]));
 }

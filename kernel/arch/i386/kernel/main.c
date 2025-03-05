@@ -4,6 +4,7 @@
 #include <kfs/kernel.h>
 
 extern void	init_gdt(void);
+extern int kernel_stack_top;
 
 /**
  * @brief The arch main entry in the higher half
@@ -13,6 +14,7 @@ extern void	init_gdt(void);
  */
 void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 {
+	int *esp;
 	(void)mb_info;
 	if (magic != MULTIBOOT2_BOOTLOADER_MAGIC)
 	{
@@ -24,4 +26,7 @@ void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 	vga_print_string_c("Colored kernel baby hehe", 0x04);
 	vga_move_cursor(7, 7);
 	vga_print_string_c("Movable cursor too !!", 0x5);
+	__asm__ ("movl %%esp, %0":"=r"(esp));
+	for (; esp < &kernel_stack_top; ++esp)
+		printk("%x ", *esp);
 }
