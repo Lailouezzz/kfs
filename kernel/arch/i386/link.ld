@@ -17,10 +17,8 @@ SECTIONS {
 		*(.bootstrap)
 	}
 
-	caca2 = .;
 	. = ALIGN(4K);
 	. += _kernel_higher_half_offset;
-	caca3 = .;
 
 	.text ALIGN(4K): AT(ADDR(.text) - _kernel_higher_half_offset) {
 		*(.text)
