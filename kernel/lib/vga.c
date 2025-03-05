@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vga.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 18:56:25 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/05 07:47:56 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/05 11:21:46 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,10 @@ int	vga_print_char_c(char c, int color)
 	return (1);
 }
 
-int	vga_print_string_c(const char *str, int color)
+int	vga_print_string_c(
+	const char *str,
+	int color
+	)
 {
 	unsigned int i;
 

@@ -6,7 +6,10 @@ _kernel_physical_start = 0x00100000;
 _kernel_virtual_start = _kernel_physical_start + _kernel_higher_half_offset;
 
 SECTIONS {
-	. = ALIGN(4K);
+	. = 0x800; /* Thank 42 */
+	.gdt ALIGN(4K) : {
+		KEEP(*(.gdt))
+	}
 	. = _kernel_physical_start; /* 0x00100000 */
 
 	.bootstrap ALIGN(4K) : {

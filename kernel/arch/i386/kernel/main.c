@@ -2,6 +2,8 @@
 
 #include <kfs/vga.h>
 
+extern void	init_gdt(void);
+
 /**
  * @brief The arch main entry in the higher half
  *
@@ -15,6 +17,7 @@ void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 	{
 		// TODO : panic
 	}
+	init_gdt();
 	vga_setup();
 	vga_print_string("Hello world !");
 	vga_print_char('\n');
