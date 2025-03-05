@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vga.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 18:56:25 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/05 01:56:29 by ale-boud         ###   ########.fr       */
+/*   Updated: 2025/03/05 07:47:56 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 #include <asm/io.h>
 #include <kfs/string.h>
+#include <kfs/vga.h>
 
 // ************************************************************************** //
 // *                                                                        * //
@@ -65,6 +66,7 @@ void	get_video_address(void);
 void	vga_setup(void)
 {
 	get_video_address();
+	vga_clear_screen();
 
 }
 
@@ -86,6 +88,11 @@ void	vga_move_cursor(int x, int y)
 	outb((unsigned char) ((pos >> 8) & 0xFF), 0x3D5);
 }
 
+void	vga_clear_screen(void)
+{
+	memset(video, 0, WIDTH * HEIGHT * sizeof(unsigned short));
+	vga_move_cursor(0, 0);
+}
 
 int	vga_print_char_c(char c, int color)
 {
