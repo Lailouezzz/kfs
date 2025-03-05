@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vga.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 18:56:25 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/04 19:51:24 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/05 01:56:29 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	get_video_address(void);
 void	vga_setup(void)
 {
 	get_video_address();
+
 }
 
 void	vga_move_cursor(int x, int y)

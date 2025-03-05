@@ -9,19 +9,20 @@
 .type _start, @function
 _start:
 	cli
-	lea KERNEL_PHYS(bootstrap_pde), %ecx
-	mov %ecx, %cr3
+	leal KERNEL_PHYS(bootstrap_pde), %ecx
+	movl %ecx, %cr3
 
-	mov %cr0, %ecx
-	or $0x80000001, %ecx
-	mov %ecx, %cr0
-	lea _higher_half, %ecx
-	jmp *%ecx
+	movl %cr0, %ecx
+	orl $0x80000001, %ecx
+	movl %ecx, %cr0
+	movl $_higher_half, %ecx
+	jmp *%ecx // Flush CPU pipeline
 
 .section .text, "ax"
-_higher_half:
-	push %eax
-	push %ebx
+_higher_half: // hello there we are in the higher half
+	movl $kernel_stack_top, %esp
+	pushl %eax
+	pushl %ebx
 	call arch_main
 1:
 	hlt

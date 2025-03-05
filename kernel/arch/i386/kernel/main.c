@@ -10,9 +10,8 @@
  */
 void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 {
-	(void)mb_info;
 	if (magic != MULTIBOOT2_BOOTLOADER_MAGIC) {
-
+		// TODO : panic
 	}
 	vga_setup();
 	vga_print_string("Hello world !");
