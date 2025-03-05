@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:22:18 by Antoine Mas       #+#    #+#             */
-/*   Updated: 2025/03/05 17:36:44 by ale-boud         ###   ########.fr       */
+/*   Updated: 2025/03/05 18:31:17 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	_print_hex(
 		unsigned int n
 		)
 {
-	if (n > 9)
+	if (n >= 16)
 		return (_print_hex(n / 16) + vga_print_char("0123456789QBCDEF"[n % 16]));
 	return (vga_print_char("0123456789QBCDEF"[n % 16]));
 }
