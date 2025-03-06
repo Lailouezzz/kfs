@@ -5,7 +5,8 @@
 #
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-include Makefile.msg
+include Makefile.vars Makefile.msg Makefile.cfg
+
 PHONY :=
 
 # Default target
@@ -41,9 +42,6 @@ run-qemu: $(ISO)
 run-qemu-debug: $(ISO)
 	qemu-system-i386 -cdrom kfsos.iso -boot d -S -s
 
-# Include vars and msg module
-include Makefile.vars Makefile.msg
-
 # ---
 # General targets
 # ---
@@ -56,7 +54,7 @@ $(K_BIN): $(K_DIR)/Makefile.cfg
 	$(call bcmd,make,-C $(K_DIR),$(MAKE) -C $(K_DIR))
 
 $(K_DIR)/Makefile.cfg:
-	$(call qcmd,sh $(K_DIR)/configure.sh)
+	$(call qcmd,sh $(K_DIR)/configure.sh $(if $(DEBUG),--debug,) $(if $(OPTIMIZE),,--optimize-disable))
 
 $(ISO): $(K_BIN) $(GRUB_CFG)
 	$(call qcmd,$(MKDIR) -pv $(ISO_ROOT_DIR)/boot/grub)

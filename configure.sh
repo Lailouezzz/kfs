@@ -28,8 +28,6 @@ General options:
 Build options:
   --debug                  enable debug mode
   --optimize-disable       disable optimization
-  --objdir=OBJDIR          directory for all object (default: ./build)
-  --outdir=OUTDIR          directory for all output executable (default : ./bin)
 Other tweaks:
   CFLAGS=CFLAGS            some more compilation flags
   LDFLAGS=LDFLAGS          some more linker flags
@@ -55,8 +53,6 @@ for arg ; do case "$arg" in
 --make-full-log) make_full_log=y ;;
 --debug) debug=y ;;
 --optimize-disable) optimize= ;;
---objdir=*) objdir="${arg#*=}" ;;
---outdir=*) outdir="${arg#*=}" ;;
 --cflags=*) cflags="${arg#*=}" ;;
 --ldflags=*) ldflags="${arg#*=}" ;;
 *) echo "Unknown option: ${arg#*=}";exit 1 ;;
@@ -83,8 +79,6 @@ MAKE_FULL_LOG = $make_full_log
 # Build options
 DEBUG := $debug
 OPTIMIZE := $optimize
-OBJDIR := $objdir
-OUTDIR := $outdir
 # Other tweaks
 CMOREFLAGS := $cflags
 LDMOREFLAGS := $ldflags
