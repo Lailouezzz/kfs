@@ -1,4 +1,4 @@
-.section .gdt, "a"
+.section .data, "a"
 .align 16
 gdt_start:
 	.quad 0x0000000000000000     // Null Descriptor
