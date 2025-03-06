@@ -26,6 +26,12 @@ fclean: clean
 	$(call rmsg,Removing $(ISO))
 	$(call qcmd,$(RM) $(ISO))
 
+PHONY += mrproper
+mrproper: fclean
+	$(call rmsg,Removing Makefile.cfg and mrproper kernel dir)
+	$(call qcmd,$(MAKE) -C $(K_DIR) mrproper) || true
+	$(call qcmd,$(RM) Makefile.cfg)
+
 PHONY += re
 re: fclean all
 
