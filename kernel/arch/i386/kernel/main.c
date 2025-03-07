@@ -29,7 +29,16 @@ void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 	vga_print_string_c("Movable cursor too !!", 0x5);
 	FOREACH_MULTIBOOT_TAG(bite, mb_info)
 	{
-		printk("tag size : %d\ntag type: %d\n", bite->size, bite->type);
+		switch (bite->type)
+		{
+		case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
+			const struct multiboot_tag_basic_meminfo	*meminfo = (void *)bite;
+			printk("upper memory size : %d\n lower memory size : %d\n", meminfo->mem_lower, meminfo->mem_upper);
+			break;
+
+		default:
+			break;
+		}
 	}
 	__asm__ ("movl %%esp, %0":"=r"(esp));
 	printk("esp = %x\n", esp);
