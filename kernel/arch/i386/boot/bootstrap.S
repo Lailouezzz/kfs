@@ -1,5 +1,5 @@
 #include <asm/memory.h>
-#include <multiboot.h>
+#include <multiboot2.h>
 
 .extern arch_main
 .global _start

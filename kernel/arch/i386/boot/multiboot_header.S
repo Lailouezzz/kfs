@@ -1,4 +1,4 @@
-#include <multiboot.h>
+#include <multiboot2.h>
 
 .extern multiboot_header
 

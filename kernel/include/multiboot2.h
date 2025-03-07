@@ -23,6 +23,8 @@
  #ifndef MULTIBOOT_HEADER
  #define MULTIBOOT_HEADER 1
 
+ #include <kfs/types.h>
+
  /* How many bytes from the start of the file we search for the header.  */
  #define MULTIBOOT_SEARCH 32768
  #define MULTIBOOT_HEADER_ALIGN 8
@@ -394,6 +396,8 @@
 		  _iter->type != MULTIBOOT_TAG_TYPE_END;                  \
 		  _iter = (void *)align_up((native_t)_iter + _iter->size, \
 								   MULTIBOOT_TAG_ALIGN))
+
+typedef u32	native_t;
 
  #endif /* ! __ASSEMBLER__ */
 
