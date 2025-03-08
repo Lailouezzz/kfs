@@ -6,7 +6,7 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:06:25 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/07 20:30:03 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/08 12:08:36 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -430,6 +430,10 @@ char	*number(
 	}
 	else
 		i = put_dec(tmp, n) - tmp;
+
+	if (i >= spec.precision)
+		spec.precision = i;
+	spec.field_width -= spec.precision;
 
 	if (!(spec.flags & (ZEROPAD | LEFT)))
 		while (--spec.field_width >= 0)
