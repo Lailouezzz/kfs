@@ -3,12 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   string.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 19:35:33 by ale-boud          #+#    #+#             */
-/*   Updated: 2025/03/07 20:19:18 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/08 11:50:41 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef  KFS_STRING_H
+# define KFS_STRING_H
 
 #include <kfs/types.h>
 #include <stdarg.h>
@@ -145,3 +148,5 @@ int		sprintf(
 			const char *fmt,
 			...
 			);
+
+#endif
