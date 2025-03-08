@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ctype.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:08:29 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/07 18:47:41 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/08 11:49:39 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef  CTYPE_H
-# define CTYPE_H
+#ifndef  KFS_CTYPE_H
+# define KFS_CTYPE_H
 
 int	isdigit(
 		int c

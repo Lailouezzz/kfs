@@ -3,13 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 19:24:44 by ale-boud          #+#    #+#             */
-/*   Updated: 2025/03/04 19:44:48 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/08 11:55:53 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <asm/types.h>
+#ifndef  KFS_TYPES_H
+# define KFS_TYPES_H
 
-#define NULL ((void *)0)
+# include <asm/types.h>
+
+# define NULL ((void *)0)
+
+#endif

@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   kernel.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:18:09 by Antoine Mas       #+#    #+#             */
-/*   Updated: 2025/03/07 20:13:37 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/08 11:49:45 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef  KERNEL_H
-# define KERNEL_H
+#ifndef  KFS_KERNEL_H
+# define KFS_KERNEL_H
 
 # include <stdarg.h>
 
