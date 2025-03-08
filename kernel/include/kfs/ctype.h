@@ -1,33 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   types.h                                            :+:      :+:    :+:   */
+/*   ctype.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 19:28:11 by ale-boud          #+#    #+#             */
-/*   Updated: 2025/03/07 18:29:05 by amassias         ###   ########.fr       */
+/*   Created: 2025/03/07 12:08:29 by amassias          #+#    #+#             */
+/*   Updated: 2025/03/07 18:47:41 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef  ASM_TYPES_H
-# define ASM_TYPES_H
+#ifndef  CTYPE_H
+# define CTYPE_H
 
-#ifndef __ASSEMBLY__
+int	isdigit(
+		int c
+		);
 
-typedef char				i8;
-typedef short				i16;
-typedef int					i32;
-typedef long int			i64;
+int	isxdigit(
+		int c
+		);
 
-typedef unsigned char		u8;
-typedef unsigned short		u16;
-typedef unsigned int		u32;
-typedef unsigned long int	u64;
+int	isalpha(
+		char c
+		);
 
-typedef u32					uaddr;
-typedef u32					usize;
-
-#endif // ifndef __ASSEMBLY__
+int	isalnum(
+		int c
+		);
 
 #endif

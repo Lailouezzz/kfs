@@ -6,6 +6,12 @@
 extern void	init_gdt(void);
 extern int kernel_stack_top;
 
+int	sprintf(
+		char *buf,
+		const char *fmt,
+		...
+		);
+
 /**
  * @brief The arch main entry in the higher half
  *
@@ -44,4 +50,8 @@ void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 	printk("esp = %x\n", esp);
 	for (int *p = esp; p < &kernel_stack_top; ++p)
 		printk("%x: %x\n", p, *p);
+	char buf[512] = {0};
+	sprintf(buf, "Hello <%s> <%c> <%p> <%d> <%x>", "world", '!', &arch_main, 42, 42);
+	printk("\"%s\"\n", buf);
+
 }

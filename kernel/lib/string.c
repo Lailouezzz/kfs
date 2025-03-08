@@ -6,7 +6,7 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 17:42:15 by ale-boud          #+#    #+#             */
-/*   Updated: 2025/03/04 19:51:33 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/07 18:31:33 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,6 +270,19 @@ int		strncmp(
 		s2++;
 	}
 	return (0);
+}
+
+usize	strnlen(
+			const char * s,
+			usize n
+			)
+{
+	usize	i;
+
+	i = 0;
+	while (s[i] && i < n)
+		++i;
+	return (i);
 }
 
 char	*strnstr(

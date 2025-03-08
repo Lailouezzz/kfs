@@ -1,33 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   types.h                                            :+:      :+:    :+:   */
+/*   ctype.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 19:28:11 by ale-boud          #+#    #+#             */
-/*   Updated: 2025/03/07 18:29:05 by amassias         ###   ########.fr       */
+/*   Created: 2025/03/07 12:09:17 by amassias          #+#    #+#             */
+/*   Updated: 2025/03/07 18:47:29 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef  ASM_TYPES_H
-# define ASM_TYPES_H
+int	isdigit(
+		int ch
+		)
+{
+	return ((ch >= '0') && (ch <= '9'));
+}
 
-#ifndef __ASSEMBLY__
+int	isxdigit(
+		int ch
+		)
+{
+	if (isdigit(ch))
+		return (1);
+	ch |= 0x20;
+	return ((ch >= 'a') && (ch <= 'f'));
+}
 
-typedef char				i8;
-typedef short				i16;
-typedef int					i32;
-typedef long int			i64;
+int	isalpha(
+		char c
+		)
+{
+	c |= 0x20;
+	return ('a' <= c && c <= 'z');
+}
 
-typedef unsigned char		u8;
-typedef unsigned short		u16;
-typedef unsigned int		u32;
-typedef unsigned long int	u64;
-
-typedef u32					uaddr;
-typedef u32					usize;
-
-#endif // ifndef __ASSEMBLY__
-
-#endif
+int	isalnum(
+		char c
+		)
+{
+	return (isalpha(c) || isdigit(c));
+}

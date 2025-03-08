@@ -6,11 +6,12 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 19:35:33 by ale-boud          #+#    #+#             */
-/*   Updated: 2025/03/04 19:49:16 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/07 20:19:18 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <kfs/types.h>
+#include <stdarg.h>
 
 void	*memchr(
 			const void *s,
@@ -90,6 +91,11 @@ int		strncmp(
 			uaddr n
 			);
 
+usize	strnlen(
+			const char * s,
+			usize n
+			);
+
 char	*strnstr(
 			const char *big,
 			const char *little,
@@ -99,4 +105,43 @@ char	*strnstr(
 char	*strrchr(
 			const char *s,
 			int c
+			);
+
+int		vsnprintf(
+			char *buf,
+			usize size,
+			const char *fmt,
+			va_list args
+			);
+
+int		vscnprintf(
+			char *buf,
+			u32 size,
+			const char *fmt,
+			va_list args
+			);
+
+int		snprintf(
+			char *buf,
+			usize size,
+			const char *fmt,
+			...
+			);
+
+int		vsprintf(
+			char *buf,
+			const char *fmt,
+			va_list args
+			);
+
+int		vsprintf(
+			char *buf,
+			const char *fmt,
+			va_list args
+			);
+
+int		sprintf(
+			char *buf,
+			const char *fmt,
+			...
 			);
