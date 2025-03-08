@@ -6,7 +6,7 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 18:56:25 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/07 09:50:27 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/08 13:38:54 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,18 @@
 // *                                                                        * //
 // ************************************************************************** //
 
-#define WIDTH (80)
-#define HEIGHT (25)
+#define R__DAC_ADDRESS_WRITE_MODE (0x3C8)
+#define R__DAC_ADDRESS_READ_MODE (0x3C7)
+#define R__DAC_DATA (0x3C9)
+#define R__DAC_STATE (0x3C7)
+
+#define R__CONTROL (0x3D4)
+#define R__DATA (0x3D5)
+
+#define COLOR_PALETTE_SIZE (256)
+
+#define TEXT_WIDTH (80)
+#define TEXT_HEIGHT (25)
 
 #define HEX_PREFIX "0x"
 #define HEX_DIGITS "0123456789ABCDEF"
@@ -35,7 +45,8 @@
 #define BIN_PREFIX "0b"
 #define BIN_DIGITS "0123456789ABCDEF"
 
-#define DEFAULT_COLOR (0x0f)
+#define TEXT_CHAR(c) (((text_color & 0xFF) << 8) | (c))
+#define CLEAR_COLOR (0x0f)
 
 // ************************************************************************** //
 // *                                                                        * //
@@ -47,6 +58,7 @@ static unsigned char	cx = 0;
 static unsigned char	cy = 0;
 static int				text_mode = 0;
 static unsigned short	*video;
+static unsigned char	text_color = CLEAR_COLOR;
 
 // ************************************************************************** //
 // *                                                                        * //
@@ -70,6 +82,66 @@ void	vga_setup(void)
 	vga_enable_cursor(13, 13);
 }
 
+u32		vga_get_palette_entry(
+			int i
+			)
+{
+	int		r;
+	int		g;
+	int		b;
+
+	if (i < 0 || i > COLOR_PALETTE_SIZE)
+		return (0);
+	outb(i, R__DAC_ADDRESS_READ_MODE);
+	r = inb(R__DAC_DATA);
+	g = inb(R__DAC_DATA);
+	b = inb(R__DAC_DATA);
+	return ((r << 16) | (g << 8) | (b << 0));
+}
+
+void	vga_set_palette_entry(
+			int i,
+			int color
+			)
+{
+	if (i < 0 || i > COLOR_PALETTE_SIZE)
+		return ;
+	outb(i, R__DAC_ADDRESS_WRITE_MODE);
+	outb((unsigned char)((color >> 16) & 0xFF), R__DAC_DATA);
+	outb((unsigned char)((color >>  8) & 0xFF), R__DAC_DATA);
+	outb((unsigned char)((color >>  0) & 0xFF), R__DAC_DATA);
+}
+
+void	vga_get_palette(
+			int *buf
+			)
+{
+	outb(0, R__DAC_ADDRESS_READ_MODE);
+	for (int i = 0; i < COLOR_PALETTE_SIZE; ++i)
+		buf[i] = inb(R__DAC_DATA);
+}
+
+void	vga_set_palette(
+			int *buf
+			)
+{
+	struct color {
+		unsigned char __padd;
+		unsigned char r;
+		unsigned char g;
+		unsigned char b;
+	}	*color;
+
+	outb(0, R__DAC_ADDRESS_WRITE_MODE);
+	for (int i = 0; i < COLOR_PALETTE_SIZE; ++i)
+	{
+		color = (struct color *)&buf[i];
+		outb(color->r, R__DAC_DATA);
+		outb(color->g, R__DAC_DATA);
+		outb(color->b, R__DAC_DATA);
+	}
+}
+
 void	vga_move_cursor(
 			int x,
 			int y
@@ -77,24 +149,24 @@ void	vga_move_cursor(
 {
 	if (x < 0) x = 0;
 	if (y < 0) y = 0;
-	if (x >= WIDTH) x = WIDTH - 1;
-	if (y >= HEIGHT) y = HEIGHT - 1;
+	if (x >= TEXT_WIDTH) x = TEXT_WIDTH - 1;
+	if (y >= TEXT_HEIGHT) y = TEXT_HEIGHT - 1;
 
 	cx = x;
 	cy = y;
 
-	unsigned short pos = y * WIDTH + x;
+	unsigned short pos = y * TEXT_WIDTH + x;
 
-	outb(0x0F, 0x3D4);
-	outb((unsigned char) (pos & 0xFF), 0x3D5);
-	outb(0x0E, 0x3D4);
-	outb((unsigned char) ((pos >> 8) & 0xFF), 0x3D5);
+	outb(0x0F, R__CONTROL);
+	outb((unsigned char) (pos & 0xFF), R__DATA);
+	outb(0x0E, R__CONTROL);
+	outb((unsigned char) ((pos >> 8) & 0xFF), R__DATA);
 }
 
 void	vga_clear_screen(void)
 {
-	for (int k = 0; k < WIDTH * HEIGHT; ++k)
-		video[k] = 0x0F00;
+	for (int k = 0; k < TEXT_WIDTH * TEXT_HEIGHT; ++k)
+		video[k] = CLEAR_COLOR << 8;
 	vga_move_cursor(0, 0);
 }
 
@@ -103,97 +175,82 @@ void	vga_enable_cursor(
 			char cursor_end
 			)
 {
-	outb(0x0A, 0x3D4);
-	outb((inb(0x3D5) & 0xC0) | cursor_start, 0x3D5);
-	outb(0x0B, 0x3D4);
-	outb((inb(0x3D5) & 0xE0) | cursor_end, 0x3D5);
+	outb(0x0A, R__CONTROL);
+	outb((inb(R__DATA) & 0xC0) | cursor_start, R__DATA);
+	outb(0x0B, R__CONTROL);
+	outb((inb(R__DATA) & 0xE0) | cursor_end, R__DATA);
 }
 
-
-int		vga_print_char_c(
-			char c,
-			int color
+void	vga_set_text_color(
+			int background,
+			int foreground
 			)
 {
-	if (c != '\n')
-		video[cx++ + WIDTH * cy] = ((color & 0xff) << 8) | c;
-	if (cx >= WIDTH || c == '\n')
-	{
-		cx = 0;
-		++cy;
-	}
-	if (cy >= HEIGHT)
-	{
-		// Scroll
-		cy = HEIGHT - 1;
-		memmove(&video[0], &video[WIDTH], WIDTH * (HEIGHT - 1) * sizeof(u16));
-		for (int k = WIDTH * (HEIGHT - 1); k < WIDTH * HEIGHT; ++k)
-			video[k] = 0x0F00;
-	}
-	vga_move_cursor(cx, cy);
-	return (1);
+	text_color = ((background & 0xf) << 4) | (foreground & 0xf);
 }
 
-int		vga_print_string_c(
-			const char *str,
-			int color
-			)
+void	vga_reset_text_color(void)
 {
-	unsigned int	i;
-
-	for (i = 0; str[i]; ++i)
-		vga_print_char_c(str[i], color);
-	return (i);
+	text_color = CLEAR_COLOR;
 }
 
-int		vga_print_hex_c(
-			char v,
-			int color
-			)
+int		vga_get_text_color(void)
 {
-	vga_print_string_c(HEX_PREFIX, color);
-	vga_print_char_c(HEX_DIGITS[(v & 0xf0) >> 4], color);
-	vga_print_char_c(HEX_DIGITS[(v & 0x0f) >> 0], color);
-	return (4);
-}
-
-int		vga_print_bits_c(
-			char v,
-			int color
-			)
-{
-	vga_print_string_c(BIN_PREFIX, color);
-	for (int i = 7; i >= 0; --i)
-		vga_print_char_c(BIN_DIGITS[(v >> i) & 1], color);
-	return (10);
+	return (text_color);
 }
 
 int		vga_print_char(
 			char c
 			)
 {
-	return (vga_print_char_c(c, DEFAULT_COLOR));
+	if (c != '\n')
+		video[cx++ + TEXT_WIDTH * cy] = TEXT_CHAR(c);
+	if (cx >= TEXT_WIDTH || c == '\n')
+	{
+		cx = 0;
+		++cy;
+	}
+	if (cy >= TEXT_HEIGHT)
+	{
+		// Scroll
+		cy = TEXT_HEIGHT - 1;
+		memmove(&video[0], &video[TEXT_WIDTH], TEXT_WIDTH * (TEXT_HEIGHT - 1) * sizeof(u16));
+		for (int k = TEXT_WIDTH * (TEXT_HEIGHT - 1); k < TEXT_WIDTH * TEXT_HEIGHT; ++k)
+			video[k] = CLEAR_COLOR << 8;
+	}
+	vga_move_cursor(cx, cy);
+	return (1);
 }
 
 int		vga_print_string(
 			const char *str
 			)
 {
-	return (vga_print_string_c(str, DEFAULT_COLOR));
+	unsigned int	i;
+
+	for (i = 0; str[i]; ++i)
+		vga_print_char(str[i]);
+	return (i);
 }
 
 int		vga_print_hex(
 			char v
 			)
 {
-	return (vga_print_hex_c(v, DEFAULT_COLOR));
+	vga_print_string(HEX_PREFIX);
+	vga_print_char(HEX_DIGITS[(v & 0xf0) >> 4]);
+	vga_print_char(HEX_DIGITS[(v & 0x0f) >> 0]);
+	return (4);
 }
 
 int		vga_print_bits(
 			char v
 			)
 {
-	return (vga_print_bits_c(v, DEFAULT_COLOR));
+	vga_print_string(BIN_PREFIX);
+	for (int i = 7; i >= 0; --i)
+		vga_print_char(BIN_DIGITS[(v >> i) & 1]);
+	return (10);
 }
 
 // ************************************************************************** //

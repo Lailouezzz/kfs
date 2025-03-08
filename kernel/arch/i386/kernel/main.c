@@ -6,11 +6,7 @@
 extern void	init_gdt(void);
 extern int kernel_stack_top;
 
-int	sprintf(
-		char *buf,
-		const char *fmt,
-		...
-		);
+void	vga_set_palette_entry(int i, int color);
 
 /**
  * @brief The arch main entry in the higher half
@@ -20,8 +16,6 @@ int	sprintf(
  */
 void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 {
-	int *esp;
-
 	(void)mb_info;
 	if (magic != MULTIBOOT2_BOOTLOADER_MAGIC)
 	{
@@ -29,29 +23,10 @@ void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 	}
 	init_gdt();
 	vga_setup();
-	vga_print_string("42\n");
-	vga_print_string_c("Colored kernel baby hehe", 0x04);
-	vga_move_cursor(7, 7);
-	vga_print_string_c("Movable cursor too !!", 0x5);
-	FOREACH_MULTIBOOT_TAG(bite, mb_info)
-	{
-		switch (bite->type)
-		{
-		case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
-			const struct multiboot_tag_basic_meminfo	*meminfo = (void *)bite;
-			printk("upper memory size : %d\n lower memory size : %d\n", meminfo->mem_lower, meminfo->mem_upper);
-			break;
-
-		default:
-			break;
-		}
-	}
-	__asm__ ("movl %%esp, %0":"=r"(esp));
-	printk("esp = %x\n", esp);
-	for (int *p = esp; p < &kernel_stack_top; ++p)
-		printk("%x: %x\n", p, *p);
-	char buf[512] = {0};
-	sprintf(buf, "Hello <%s> <%c> <%p> <%d> <%x>", "world", '!', &arch_main, 42, 42);
-	printk("\"%s\"\n", buf);
-
+	vga_set_text_color(1, 2);
+	vga_print_string("hello");
+	vga_set_palette_entry(1, 0xff0000);
+	vga_print_string(" world");
+	vga_reset_text_color();
+	vga_print_string(" !");
 }
