@@ -5,13 +5,9 @@
 #include <asm/idt.h>
 
 extern void	init_gdt(void);
-extern int kernel_stack_top;
 
-int	sprintf(
-		char *buf,
-		const char *fmt,
-		...
-		);
+static
+void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic);
 
 /**
  * @brief The arch main entry in the higher half
@@ -21,38 +17,40 @@ int	sprintf(
  */
 void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 {
-	int *esp;
-
-	(void)mb_info;
-	if (magic != MULTIBOOT2_BOOTLOADER_MAGIC)
-	{
-		// TODO : panic
-	}
 	init_gdt();
 	init_idt();
 	vga_setup();
+	check_multiboot(mb_info, magic);
 	vga_print_string("42\n");
 	vga_print_string_c("Colored kernel baby hehe", 0x04);
 	vga_move_cursor(7, 7);
 	vga_print_string_c("Movable cursor too !!", 0x5);
-	FOREACH_MULTIBOOT_TAG(bite, mb_info)
+}
+
+static
+void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic)
+{
+	interrupt_stack_frame_t	s = {0};
+
+	if (magic != MULTIBOOT2_BOOTLOADER_MAGIC)
 	{
-		switch (bite->type)
+		DUMP_STACK_FRAME(s);
+		panic(s, "No multiboot 2 header present (%x)", magic);
+	}
+
+	FOREACH_MULTIBOOT_TAG(tag, mb_info)
+	{
+		switch (tag->type)
 		{
 		case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
-			const struct multiboot_tag_basic_meminfo	*meminfo = (void *)bite;
-			printk("upper memory size : %d\n lower memory size : %d\n", meminfo->mem_lower, meminfo->mem_upper);
+			const struct multiboot_tag_basic_meminfo	*meminfo = (void *)tag;
+
+			printk("upper memory size : %d\nlower memory size : %d\n",
+				meminfo->mem_lower, meminfo->mem_upper);
 			break;
 
 		default:
 			break;
 		}
 	}
-	__asm__ ("movl %%esp, %0":"=r"(esp));
-	printk("esp = %x\n", esp);
-	for (int *p = esp; p < &kernel_stack_top; ++p)
-		printk("%x: %x\n", p, *p);
-	char buf[512] = {0};
-	sprintf(buf, "Hello <%s> <%c> <%p> <%d> <%x>", "world", '!', &arch_main, 42, 42);
-	printk("\"%s\"\n", buf);
 }

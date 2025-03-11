@@ -6,7 +6,7 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:24:15 by Antoine Mas       #+#    #+#             */
-/*   Updated: 2025/03/11 15:51:52 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/11 16:51:57 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ idt_pointer_t	idt_pointer = {
 	.offset = idt_entries
 };
 
-void	idt_init(void)
+void	init_idt(void)
 {
 	/* Set exceptions entries */
 	for (usize i = 0; i < 3; ++i)

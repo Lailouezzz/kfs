@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   except.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Antoine Massias <massias.antoine.pro@gm    +#+  +:+       +#+        */
+/*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:05:29 by Antoine Mas       #+#    #+#             */
-/*   Updated: 2025/03/10 20:11:18 by Antoine Mas      ###   ########.fr       */
+/*   Updated: 2025/03/11 18:45:40 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,40 @@
 /*                      32 to 255 are user defined*/
 
 # ifndef __ASSEMBLY__
+
+# define HALT() for (;;) __asm__ volatile ("hlt")
+
+# define DUMP_STACK_FRAME(sf)								\
+	{														\
+		interrupt_stack_frame_t	*__asm__ptr__s__ = &(sf);	\
+		__asm__ volatile (									\
+			"pushl %%eax;"									\
+			"movl %%edi, %%eax;"							\
+			"movl %0, %%edi;"								\
+			"movl %%eax, 24(%%edi);"						\
+			"movl %%cr0, %%eax;"							\
+			"movl %%eax,   (%%edi);"						\
+			"movl %%cr3, %%eax;"							\
+			"movl %%eax,  4(%%edi);"						\
+			"popl %%eax;"									\
+			"movl %%edx,  8(%%edi);"						\
+			"movl %%ecx, 12(%%edi);"						\
+			"movl %%ebx, 16(%%edi);"						\
+			"movl %%eax, 20(%%edi);"						\
+			"movl %%esi, 28(%%edi);"						\
+			"movl %%ebp, 32(%%edi);"						\
+			"movl %%esp, 36(%%edi);"						\
+			:												\
+			: "r"(__asm__ptr__s__)							\
+			: "eax", "edi"									\
+		);													\
+	}
+
 /* TODO : move this struct into other header */
 typedef struct
 {
+	u32	cr0;
+	u32	cr3;
 	u32	edx;
 	u32	ecx;
 	u32	ebx;
