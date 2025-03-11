@@ -2,6 +2,7 @@
 
 #include <kfs/vga.h>
 #include <kfs/kernel.h>
+#include <asm/idt.h>
 
 extern void	init_gdt(void);
 extern int kernel_stack_top;
@@ -28,6 +29,7 @@ void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 		// TODO : panic
 	}
 	init_gdt();
+	init_idt();
 	vga_setup();
 	vga_print_string("42\n");
 	vga_print_string_c("Colored kernel baby hehe", 0x04);
@@ -53,5 +55,4 @@ void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 	char buf[512] = {0};
 	sprintf(buf, "Hello <%s> <%c> <%p> <%d> <%x>", "world", '!', &arch_main, 42, 42);
 	printk("\"%s\"\n", buf);
-
 }

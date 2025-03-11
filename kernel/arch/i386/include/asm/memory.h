@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   memory.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: Antoine Massias <massias.antoine.pro@gm    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 19:18:44 by ale-boud          #+#    #+#             */
-/*   Updated: 2025/03/05 01:27:23 by ale-boud         ###   ########.fr       */
+/*   Updated: 2025/03/10 18:23:09 by Antoine Mas      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # define KERNEL_STACK_SIZE 0x4000U
 
 # define PAGE_SIZE 0x1000
+
+# define __PACKED__ __attribute__((packed))
 
 # ifndef __ASSEMBLY__
 
