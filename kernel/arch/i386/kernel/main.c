@@ -6,6 +6,7 @@
 #include <asm/io.h>
 #include <asm/ps2.h>
 #include <asm/keyboard.h>
+#include <asm/mouse.h>
 
 extern
 void	init_gdt(void);
@@ -15,6 +16,9 @@ void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic);
 
 static
 void	keyboard_callback(keyboard_event_t event);
+
+static
+void	mouse_callback(mouse_t mouse);
 
 /**
  * @brief The arch main entry in the higher half
@@ -30,9 +34,12 @@ void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 	check_multiboot(mb_info, magic);
 
 	vga_setup();
+	printk("%11c %11c | ", ' ', ' ');
+	vga_print_string_c("   \n", 0x80);
 	init_ps2();
 
 	keyboard_set_callback(keyboard_callback);
+	mouse_set_callback(mouse_callback);
 
 	__asm__("sti");
 
@@ -67,8 +74,6 @@ void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic)
 	}
 }
 
-static u8 kbmap[256] = {0};
-
 static
 void	keyboard_callback(keyboard_event_t event)
 {
@@ -99,4 +104,41 @@ void	keyboard_callback(keyboard_event_t event)
 	}
 	else
 		vga_print_char(event.repr);
+}
+
+static
+void	mouse_callback(mouse_t mouse)
+{
+	static mouse_t	old_state = {0};
+	int				cx;
+	int				cy;
+
+	vga_get_cursor(&cx, &cy);
+	if (old_state.x != mouse.x)
+	{
+		vga_move_cursor(0, 0);
+		printk("%+10d", mouse.x);
+	}
+	if (old_state.y != mouse.y)
+	{
+		vga_move_cursor(12, 0);
+		printk("%+10d", mouse.y);
+	}
+	if (old_state.left_pressed != mouse.left_pressed)
+	{
+		vga_move_cursor(26, 0);
+		vga_print_char_c(' ', mouse.left_pressed ? 0x40 : 0x80);
+	}
+	if (old_state.middle_pressed != mouse.middle_pressed)
+	{
+		vga_move_cursor(27, 0);
+		vga_print_char_c(' ', mouse.middle_pressed ? 0x40 : 0x80);
+	}
+	if (old_state.right_pressed != mouse.right_pressed)
+	{
+		vga_move_cursor(28, 0);
+		vga_print_char_c(' ', mouse.right_pressed ? 0x40 : 0x80);
+	}
+	vga_move_cursor(cx, cy);
+	old_state = mouse;
 }

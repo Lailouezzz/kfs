@@ -6,7 +6,7 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 13:26:50 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/12 16:58:12 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/12 18:09:07 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <asm/ps2.h>
 #include <asm/io.h>
 #include <asm/keyboard.h>
+#include <asm/mouse.h>
 #include <kfs/kernel.h>
 
 // ************************************************************************** //
@@ -37,9 +38,6 @@
 
 static void	ps2_enable_port(u32 num, int enable);
 static void	ps2_wait_ms(u32 ms);
-
-// TODO: Move later
-static void	init_mouse(int n);
 
 // ************************************************************************** //
 // *                                                                        * //
@@ -336,10 +334,4 @@ static void	ps2_wait_ms(u32 ms)
 	ms *= 10000;
 	while (--ms)
 		__asm__ volatile ("pause");
-}
-
-// TODO: Move later
-void	init_mouse(int n)
-{
-	LOG("Init mouse %d", n);
 }

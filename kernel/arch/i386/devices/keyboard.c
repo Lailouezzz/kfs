@@ -6,7 +6,7 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 15:22:51 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/12 17:51:03 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/12 18:25:02 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,7 @@ int	keyboard_is_key_pressed(u32 keycode)
 // *                                                                        * //
 // ************************************************************************** //
 
+static
 void	_handler(interrupt_stack_frame_t *stack_frame)
 {
 	u8	sc;
@@ -198,6 +199,7 @@ void	_handler(interrupt_stack_frame_t *stack_frame)
 		callback(next_event);
 }
 
+static
 int	_process_byte(keyboard_context_t* ctx, u8 sc, keyboard_event_t* event)
 {
 	if (sc == PS2_DEV_ACK)
@@ -242,6 +244,7 @@ int	_process_byte(keyboard_context_t* ctx, u8 sc, keyboard_event_t* event)
 	return (ctx->state == KBD_NORMAL);
 }
 
+static
 int	_is_valid_scancode(u8* bytes, usize len, u32* keycode)
 {
 	if (len < 2)
@@ -302,6 +305,7 @@ int	_is_valid_scancode(u8* bytes, usize len, u32* keycode)
 	return (0);
 }
 
+static
 char	_make_shift(char c)
 {
 	if (c >= 'a' && c <= 'z')
@@ -333,6 +337,7 @@ char	_make_shift(char c)
 	return (c);
 }
 
+static
 char	_keycode_to_char(u32 keycode, int shift)
 {
 	char	c;
