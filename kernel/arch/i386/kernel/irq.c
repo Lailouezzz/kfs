@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 15:53:21 by ale-boud          #+#    #+#             */
-/*   Updated: 2025/03/12 18:57:18 by ale-boud         ###   ########.fr       */
+/*   Updated: 2025/03/12 18:59:47 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,18 @@ void	init_irq(void)
 		idt_set_gate(k+FIRST_EXTERNAL_VECTOR, interrupt_stub_table[k], IDT_INT_GATE);
 }
 
-void		request_irq(unsigned int irq, irq_cb_t cb)
+void	request_irq(unsigned int irq, irq_cb_t cb)
 {
 	if (irq >= IRQS_NR)
 		panic("The IRQ%d requested is out of range\n");
 	irq_cbs[irq] = cb;
+}
+
+void	free_irq(unsigned int irq)
+{
+	if (irq >= IRQS_NR)
+		panic("The IRQ%d requested is out of range\n");
+	irq_cbs[irq] = NULL;
 }
 
 /**

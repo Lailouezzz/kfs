@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:05:29 by Antoine Mas       #+#    #+#             */
-/*   Updated: 2025/03/12 18:57:27 by ale-boud         ###   ########.fr       */
+/*   Updated: 2025/03/12 18:59:12 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ extern void	*interrupt_stub_table[IRQS_NR];
 void		init_irq(void);
 
 void		request_irq(unsigned int irq, irq_cb_t cb);
+void		free_irq(unsigned int irq, irq_cb_t cb);
 
 # endif
 
