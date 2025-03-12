@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 15:53:21 by ale-boud          #+#    #+#             */
-/*   Updated: 2025/03/12 19:07:18 by ale-boud         ###   ########.fr       */
+/*   Updated: 2025/03/12 19:12:40 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ void	init_irq(void)
 {
 	remap_pic(FIRST_EXTERNAL_VECTOR, FIRST_EXTERNAL_VECTOR+8);
 	for (usize k = 0; k < IRQS_NR; ++k)
-		idt_set_gate(k+FIRST_EXTERNAL_VECTOR, interrupt_stub_table[k], IDT_INT_GATE);
+		idt_set_gate(k+FIRST_EXTERNAL_VECTOR, interrupt_stub_table[k],
+			IDT_INT_GATE);
 }
 
 void	request_irq(unsigned int irq, irq_cb_t cb)
