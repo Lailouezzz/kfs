@@ -6,13 +6,15 @@
 /*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 13:30:12 by ale-boud          #+#    #+#             */
-/*   Updated: 2025/03/12 13:38:15 by ale-boud         ###   ########.fr       */
+/*   Updated: 2025/03/12 17:23:43 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef  ASM_PIC_H
 # define ASM_PIC_H
 
+# include <kfs/compiler.h>
+# include <asm/io.h>
 # include <kfs/types.h>
 
 # define PIC1						(0x20)	/* IO base address for master PIC */
@@ -48,6 +50,13 @@
  * @param s_off slave remap offset
  */
 void	remap_pic(u8 m_off, u8 s_off);
+
+static inline void ALWAYS_INLINE	pic_send_ack(u8 vector)
+{
+	if (vector & 8)
+		outb(PIC_EOI, PIC2_COMMAND);
+	outb(PIC_EOI, PIC1_COMMAND);
+}
 
 # endif // ifndef __ASSEMBLY__
 

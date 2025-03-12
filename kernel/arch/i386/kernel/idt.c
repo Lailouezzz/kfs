@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:24:15 by Antoine Mas       #+#    #+#             */
-/*   Updated: 2025/03/12 16:52:24 by ale-boud         ###   ########.fr       */
+/*   Updated: 2025/03/12 17:17:40 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ idt_pointer_s	idt_pointer = {
 void	init_idt(void)
 {
 	for (usize i = 0; i < 3; ++i)
-		idt_entries[i] = IDT_ENTRY(except_handler_table[i], IDT_INT_GATE, 0x08);
-	idt_entries[3] = IDT_ENTRY(except_handler_table[3], IDT_TRAP_GATE, 0x08);
-	idt_entries[4] = IDT_ENTRY(except_handler_table[4], IDT_TRAP_GATE, 0x08);
+		idt_set_gate(i, except_handler_table[i], IDT_INT_GATE);
+	idt_set_gate(3, except_handler_table[3], IDT_TRAP_GATE);
+	idt_set_gate(4, except_handler_table[4], IDT_TRAP_GATE);
 	for (usize i = 5; i < sizeof(except_handler_table) / sizeof(*except_handler_table); ++i)
-		idt_entries[i] = IDT_ENTRY(except_handler_table[i], IDT_INT_GATE, 0x08);
+		idt_set_gate(i, except_handler_table[i], IDT_INT_GATE);
 
 	load_idt();
 }

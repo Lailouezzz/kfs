@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:19:39 by Antoine Mas       #+#    #+#             */
-/*   Updated: 2025/03/12 16:46:50 by ale-boud         ###   ########.fr       */
+/*   Updated: 2025/03/12 17:16:38 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ extern idt_pointer_s	idt_pointer;
 
 void	init_idt(void);
 
-static inline void ALWAYS_INLINE	idt_set_gate(u8 number, void *addr, u8 sel, u16 attr)
+static inline void ALWAYS_INLINE	idt_set_gate(u8 number, void *addr, u16 attr)
 {
-	idt_entries[number] = IDT_ENTRY(addr, attr, sel);
+	idt_entries[number] = IDT_ENTRY(addr, attr, 0x08);
 }
 
 static inline void ALWAYS_INLINE	load_idt(void)
