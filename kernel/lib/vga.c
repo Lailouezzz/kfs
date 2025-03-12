@@ -6,7 +6,7 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 18:56:25 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/07 09:50:27 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/12 17:16:26 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,15 @@ void	vga_move_cursor(
 	outb((unsigned char) (pos & 0xFF), 0x3D5);
 	outb(0x0E, 0x3D4);
 	outb((unsigned char) ((pos >> 8) & 0xFF), 0x3D5);
+}
+
+void	vga_get_cursor(
+			int *x,
+			int *y
+		)
+{
+	*x = cx;
+	*y = cy;
 }
 
 void	vga_clear_screen(void)

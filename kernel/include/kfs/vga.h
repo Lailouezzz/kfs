@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vga.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 18:53:39 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/05 15:15:48 by ale-boud         ###   ########.fr       */
+/*   Updated: 2025/03/12 17:16:28 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 void	vga_setup(void);
 
 void	vga_move_cursor(int x, int y);
+void	vga_get_cursor(int *x, int *y);
 void	vga_enable_cursor(char x, char y);
 void	vga_clear_screen(void);
 

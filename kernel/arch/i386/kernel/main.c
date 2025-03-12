@@ -4,6 +4,8 @@
 #include <kfs/kernel.h>
 #include <asm/idt.h>
 #include <asm/io.h>
+#include <asm/ps2.h>
+#include <asm/keyboard.h>
 
 extern
 void	init_gdt(void);
@@ -11,7 +13,8 @@ void	init_gdt(void);
 static
 void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic);
 
-void	init_ps2(void);
+static
+void	keyboard_callback(keyboard_event_t event);
 
 /**
  * @brief The arch main entry in the higher half
@@ -28,6 +31,8 @@ void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 
 	vga_setup();
 	init_ps2();
+
+	keyboard_set_callback(keyboard_callback);
 
 	__asm__("sti");
 
@@ -60,4 +65,38 @@ void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic)
 			break;
 		}
 	}
+}
+
+static u8 kbmap[256] = {0};
+
+static
+void	keyboard_callback(keyboard_event_t event)
+{
+	int	cx;
+	int	cy;
+
+	if (event.keycode > KBD_ENTER)
+		return ;
+	if (!event.pressed)
+		return ;
+	if (event.keycode == KBD_BACKSPACE)
+	{
+		vga_get_cursor(&cx, &cy);
+		--cx;
+		if (cx < 0)
+		{
+			cx = 80;
+			--cy;
+			if (cy < 0)
+			{
+				cx = 0;
+				cy = 0;
+			}
+		}
+		vga_move_cursor(cx, cy);
+		vga_print_char(' ');
+		vga_move_cursor(cx, cy);
+	}
+	else
+		vga_print_char(event.repr);
 }
