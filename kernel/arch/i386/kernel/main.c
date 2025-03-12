@@ -4,10 +4,18 @@
 #include <kfs/kernel.h>
 #include <asm/idt.h>
 #include <asm/irq.h>
+#include <asm/ptrace.h>
 
 extern void	init_gdt(void);
 
 static void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic);
+
+static void	do_timer(unsigned int irq, int_regs_s *regs)
+{
+	UNUSED(regs);
+	UNUSED(irq);
+	printk("Timer\n");
+}
 
 /**
  * @brief The arch main entry in the higher half
@@ -20,6 +28,7 @@ void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 	init_gdt();
 	init_idt();
 	init_irq();
+	request_irq(0, do_timer);
 
 	vga_setup();
 

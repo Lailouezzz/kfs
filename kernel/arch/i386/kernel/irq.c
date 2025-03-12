@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 15:53:21 by ale-boud          #+#    #+#             */
-/*   Updated: 2025/03/12 18:59:47 by ale-boud         ###   ########.fr       */
+/*   Updated: 2025/03/12 19:04:20 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ void	do_irq(int_regs_s regs)
 	const u8	vector = regs.orig_eax;
 	irq_cb_t	cb = irq_cbs[vector];
 
-	printk("do_irq (%d)\n", vector);
+	// printk("do_irq (%d)\n", vector);
 	if (cb != NULL)
-		cb(vector);
+		cb(vector, &regs);
 	/* TODO: move pic_send_ack to an abstract structure for futur use (APIC) */
 	pic_send_ack(vector);
 }
