@@ -3,12 +3,11 @@
 #include <kfs/vga.h>
 #include <kfs/kernel.h>
 #include <asm/idt.h>
+#include <asm/irq.h>
 
 extern void	init_gdt(void);
 
 static void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic);
-
-static void	timer_handler(interrupt_stack_frame_s *sf);
 
 /**
  * @brief The arch main entry in the higher half
@@ -20,6 +19,7 @@ void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 {
 	init_gdt();
 	init_idt();
+	init_irq();
 
 	vga_setup();
 
@@ -31,19 +31,12 @@ void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 	vga_print_string_c("Movable cursor too !!\n", 0x5);
 
 	__asm__("sti");
-
-	irq_install_handler(0, timer_handler);
 }
 
 static void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic)
 {
-	interrupt_stack_frame_s	s = {0};
-
 	if (magic != MULTIBOOT2_BOOTLOADER_MAGIC)
-	{
-		DUMP_STACK_FRAME(s);
-		panic(s, "No multiboot 2 header present (%x)", magic);
-	}
+		panic("No multiboot 2 header present (%x)", magic);
 
 	FOREACH_MULTIBOOT_TAG(tag, mb_info)
 	{
@@ -54,22 +47,10 @@ static void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic)
 
 			printk("upper memory size : %d\nlower memory size : %d\n",
 				meminfo->mem_lower, meminfo->mem_upper);
-			break;
+			break ;
 
 		default:
-			break;
+			break ;
 		}
-	}
-}
-
-static void	timer_handler(interrupt_stack_frame_s *sf)
-{
-	static int x = 0;
-
-	(void)sf;
-	if (++x >= 10)
-	{
-		x = 0;
-		printk("Timer fired 10 ticks\n");
 	}
 }

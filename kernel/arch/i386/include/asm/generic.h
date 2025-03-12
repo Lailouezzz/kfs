@@ -1,22 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   kernel.h                                           :+:      :+:    :+:   */
+/*   generic.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/05 12:18:09 by Antoine Mas       #+#    #+#             */
-/*   Updated: 2025/03/12 14:30:46 by ale-boud         ###   ########.fr       */
+/*   Created: 2025/03/12 14:34:17 by ale-boud          #+#    #+#             */
+/*   Updated: 2025/03/12 14:35:29 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef  KFS_KERNEL_H
-# define KFS_KERNEL_H
+/**
+ * @brief Architecture specific instrucitons
+ *
+ */
 
-# include <stdarg.h>
+#ifndef  ASM_GENERIC_H
+# define ASM_GENERIC_H
 
-int		vprintk(const char *fmt, va_list list);
-int		printk(const char *fmt, ...);
-void	panic(const char *fmt, ...);
+# ifndef __ASSEMBLY__
+
+#  define HALT() __asm__ volatile ("hlt")
+
+# endif // ifndef __ASSEMBLY__
 
 #endif

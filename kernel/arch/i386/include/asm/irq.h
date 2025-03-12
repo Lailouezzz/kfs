@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:05:29 by Antoine Mas       #+#    #+#             */
-/*   Updated: 2025/03/12 14:04:12 by ale-boud         ###   ########.fr       */
+/*   Updated: 2025/03/12 17:02:12 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 
 # define FIRST_EXTERNAL_VECTOR	0x20
 # define SYSCALL_VECTOR			0x80
+
+# define IRQS_NR				16
 
 # ifndef __ASSEMBLY__
 
@@ -52,32 +54,9 @@
 /* TODO : same TODO has bellow */
 #  define HALT() for (;;) __asm__ volatile ("hlt")
 
-/* TODO : move this struct into other header */
-typedef struct
-{
-	u32	cr0;
-	u32	cr3;
-	u32	edx;
-	u32	ecx;
-	u32	ebx;
-	u32	eax;
-	u32	edi;
-	u32	esi;
-	u32	ebp;
-	u32	esp;
-	u32	intnum;
-	u32	errcode;
-}	PACKED interrupt_stack_frame_s;
+extern void	*interrupt_stub_table[IRQS_NR];
 
-typedef void (*exception_handler_t)(interrupt_stack_frame_s *);
-
-void	install_irq(void);
-
-void	irq_install_handler(int irq, exception_handler_t handler);
-void	irq_uninstall_handler(int irq);
-
-void	isr_install_handler(int isr, exception_handler_t handler);
-void	isr_uninstall_handler(int isr);
+void		init_irq(void);
 
 # endif
 

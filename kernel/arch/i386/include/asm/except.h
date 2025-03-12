@@ -6,13 +6,12 @@
 /*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 14:00:07 by ale-boud          #+#    #+#             */
-/*   Updated: 2025/03/12 14:00:36 by ale-boud         ###   ########.fr       */
+/*   Updated: 2025/03/12 16:42:14 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef  ASM_EXCEPT_H
 # define ASM_EXCEPT_H
-
 
 /*       NAME        |  VEC NUM  |  DESCRIPTION                               */
 # define EXCEPT_DE_VEC        0  /* Divide error                              */
