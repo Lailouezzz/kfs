@@ -6,11 +6,15 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:24:15 by Antoine Mas       #+#    #+#             */
-/*   Updated: 2025/03/11 16:51:57 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/12 13:13:02 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <asm/idt.h>
+#include <asm/except.h>
+
+extern
+void	*const except_isr_table[32];
 
 /* Define the IDT */
 
@@ -23,17 +27,10 @@ idt_pointer_t	idt_pointer = {
 
 void	init_idt(void)
 {
-	/* Set exceptions entries */
-	for (usize i = 0; i < 3; ++i)
+	for (usize i = 0; i < 32; ++i)
 		idt_entries[i] = IDT_ENTRY(except_isr_table[i], IDT_INT_GATE, 0x08);
 
-	idt_entries[3] = IDT_ENTRY(except_isr_table[3], IDT_TRAP_GATE, 0x08);
-	idt_entries[4] = IDT_ENTRY(except_isr_table[4], IDT_TRAP_GATE, 0x08);
-
-	for (usize i = 5; i < sizeof(except_isr_table) / sizeof(*except_isr_table); ++i)
-		idt_entries[i] = IDT_ENTRY(except_isr_table[i], IDT_INT_GATE, 0x08);
-
-	/* TODO : insert syscall interrupt */
+	irq_install();
 
 	/* Let's load IDT */
 	__asm__ volatile(
@@ -44,4 +41,9 @@ void	init_idt(void)
 	);
 
 	return;
+}
+
+void	idt_set_gate(u8 number, void *addr, u8 sel, u16 attr)
+{
+	idt_entries[number] = IDT_ENTRY(addr, attr, sel);
 }

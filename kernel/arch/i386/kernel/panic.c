@@ -6,7 +6,7 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 16:42:26 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/11 18:53:27 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/11 23:29:57 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	panic(interrupt_stack_frame_t stack_frame, const char *fmt, ...)
 	vprintk(fmt, args);
 	va_end(args);
 
-	printk("\n--- INTERRUPT STACK FRAME :\n");
+	printk("\n--- INTERRUPT STACK FRAME (%d %x) :\n", stack_frame.intnum, stack_frame.intnum);
 	printk("EAX=0x%08x  EBX=0x%08x  ECX=0x%08x  EDX=0x%08x\n",
 			stack_frame.eax, stack_frame.ebx, stack_frame.ecx, stack_frame.edx);
 	printk("EDI=0x%08x  ESI=0x%08x  EBP=0x%08x  ESP=0x%08x\n",

@@ -6,7 +6,7 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:19:39 by Antoine Mas       #+#    #+#             */
-/*   Updated: 2025/03/11 16:34:57 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/11 20:45:01 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,7 @@ extern
 idt_pointer_t	idt_pointer;
 
 void	init_idt(void);
+
+void	idt_set_gate(u8 number, void *addr, u8 sel, u16 attr);
 
 #endif

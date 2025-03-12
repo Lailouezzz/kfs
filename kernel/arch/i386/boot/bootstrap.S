@@ -24,9 +24,9 @@ _higher_half: // hello there we are in the higher half
 	pushl %eax
 	pushl %ebx
 	call arch_main
-1:
+_1:
 	hlt
-	jmp 1
+	jmp _1
 
 .section .data
 .align PAGE_SIZE

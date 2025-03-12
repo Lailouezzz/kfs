@@ -6,7 +6,7 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:06:25 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/08 12:08:36 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/12 13:13:34 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,7 @@ qualifier:
 		case '%': spec->type = FORMAT_TYPE_PERCENT_CHAR; return (++fmt - start);
 
 		case 'o': spec->base = 8; break ;
-		case 'x': spec->flags |= SMALL;
+		case 'x': spec->flags |= SMALL; spec->base = 16; break ;
 		case 'X': spec->base = 16; break ;
 		case 'd':
 		case 'i': spec->flags |= SIGN;

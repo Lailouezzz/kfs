@@ -4,10 +4,14 @@
 #include <kfs/kernel.h>
 #include <asm/idt.h>
 
-extern void	init_gdt(void);
+extern
+void	init_gdt(void);
 
 static
 void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic);
+
+static
+void	timer_handler(interrupt_stack_frame_t *sf);
 
 /**
  * @brief The arch main entry in the higher half
@@ -17,14 +21,21 @@ void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic);
  */
 void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 {
+	vga_setup();
+
 	init_gdt();
 	init_idt();
-	vga_setup();
+
 	check_multiboot(mb_info, magic);
+
 	vga_print_string("42\n");
 	vga_print_string_c("Colored kernel baby hehe", 0x04);
 	vga_move_cursor(7, 7);
-	vga_print_string_c("Movable cursor too !!", 0x5);
+	vga_print_string_c("Movable cursor too !!\n", 0x5);
+
+	__asm__("sti");
+
+	irq_install_handler(0, timer_handler);
 }
 
 static
@@ -52,5 +63,18 @@ void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic)
 		default:
 			break;
 		}
+	}
+}
+
+static
+void	timer_handler(interrupt_stack_frame_t *sf)
+{
+	static int x = 0;
+
+	(void)sf;
+	if (++x >= 10)
+	{
+		x = 0;
+		printk("Timer fired 10 ticks\n");
 	}
 }
