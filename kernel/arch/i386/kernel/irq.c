@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 15:53:21 by ale-boud          #+#    #+#             */
-/*   Updated: 2025/03/12 19:04:20 by ale-boud         ###   ########.fr       */
+/*   Updated: 2025/03/12 19:07:18 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 #include <asm/pic.h>
 #include <asm/io.h>
 
+/**
+ * @todo Create a structure with advanced IRQ handling information
+ */
 irq_cb_t	irq_cbs[IRQS_NR] = {
 	[0 ... IRQS_NR - 1] = NULL
 };
