@@ -1,4 +1,5 @@
-#include "asm/except.h"
+#include <asm/irq.h>
+#include <asm/except.h>
 
 /******************************************************************************/
 /*                                                                            */
@@ -6,7 +7,7 @@
 /*                                                                            */
 /******************************************************************************/
 
-// Pushing registers of interrupt_stack_frame_t (asm/except.h) onto the stack.
+// Pushing registers of interrupt_stack_frame_s (asm/irq.h) onto the stack.
 .macro pushaq
 	pushl %esp
 	pushl %ebp
@@ -16,18 +17,10 @@
 	pushl %ebx
 	pushl %ecx
 	pushl %edx
-	movl %cr3, %eax
-	pushl %eax
-	movl %cr0, %eax
-	pushl %eax
 .endm
 
-// Popping registers of interrupt_stack_frame_t (asm/except.h) onto the stack.
+// Popping registers of interrupt_stack_frame_s (asm/irq.h) onto the stack.
 .macro popaq
-	popl %eax
-	mov %eax, %cr0
-	popl %eax
-	mov %eax, %cr3
 	popl %edx
 	popl %ecx
 	popl %ebx
@@ -44,9 +37,8 @@
 	pushl $0
 	pushl $\name
 	pushaq
-	// Initial esp is now at esp+10*4
 
-	// Pointer to regs_s struct
+	// Pointer to interrupt_stack_frame_s struct
 	mov %esp, %edi
 
 	cld
@@ -54,7 +46,7 @@
 
 	// Skip int num and err code
 	popaq
-	add $8, %esp
+	addl $8, %esp
 	sti
 	iretl
 .endm
@@ -64,7 +56,6 @@
 	cli
 	push $\name
 	pushaq
-	// Initial esp is now at esp+10*4
 
 	// Pointer to interrupt_stack_frame_s struct
 	mov %esp, %edi
@@ -74,7 +65,7 @@
 
 	popaq
 	// Skip int num and err code
-	add $4, %esp
+	addl $8, %esp
 	sti
 	iretl
 .endm
@@ -86,7 +77,6 @@ except_\name:
 	push $\name
 	cli
 	pushaq
-	// Initial esp is now at esp+10*4
 
 	// Pointer to interrupt_stack_frame_s struct
 	mov %esp, %edi
@@ -96,7 +86,7 @@ except_\name:
 
 	popaq
 	// Skip int num and err code
-	add $8, %esp
+	addl $8, %esp
 	sti
 	iretl
 .endm
@@ -126,6 +116,8 @@ irq\id:
 /* ISR definitions                                                            */
 /*                                                                            */
 /******************************************************************************/
+
+/* TODO: remove except_isr*** replace by the real excpetions handler */
 
 except_de: // Divide error
 	except_isr_noerr EXCEPT_DE_VEC
@@ -206,9 +198,11 @@ irq 15 47
 // 'irq_handler' in our C code. We need to create this in an 'irq.c'
 irq_common_stub:
 	pushaq
+	cld
 	call irq_handler
 	popaq
 	add $8, %esp
+	sti
 	iret
 
 /******************************************************************************/

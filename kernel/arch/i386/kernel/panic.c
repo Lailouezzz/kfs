@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   panic.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 16:42:26 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/11 23:29:57 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/12 14:04:10 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include <stdarg.h>
 
-void	panic(interrupt_stack_frame_t stack_frame, const char *fmt, ...)
+void	panic(interrupt_stack_frame_s stack_frame, const char *fmt, ...)
 {
 	va_list args;
 

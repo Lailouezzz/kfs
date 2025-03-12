@@ -4,14 +4,11 @@
 #include <kfs/kernel.h>
 #include <asm/idt.h>
 
-extern
-void	init_gdt(void);
+extern void	init_gdt(void);
 
-static
-void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic);
+static void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic);
 
-static
-void	timer_handler(interrupt_stack_frame_t *sf);
+static void	timer_handler(interrupt_stack_frame_s *sf);
 
 /**
  * @brief The arch main entry in the higher half
@@ -21,10 +18,10 @@ void	timer_handler(interrupt_stack_frame_t *sf);
  */
 void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 {
-	vga_setup();
-
 	init_gdt();
 	init_idt();
+
+	vga_setup();
 
 	check_multiboot(mb_info, magic);
 
@@ -38,10 +35,9 @@ void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 	irq_install_handler(0, timer_handler);
 }
 
-static
-void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic)
+static void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic)
 {
-	interrupt_stack_frame_t	s = {0};
+	interrupt_stack_frame_s	s = {0};
 
 	if (magic != MULTIBOOT2_BOOTLOADER_MAGIC)
 	{
@@ -66,8 +62,7 @@ void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic)
 	}
 }
 
-static
-void	timer_handler(interrupt_stack_frame_t *sf)
+static void	timer_handler(interrupt_stack_frame_s *sf)
 {
 	static int x = 0;
 

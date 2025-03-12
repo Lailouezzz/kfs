@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   except.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:12:28 by Antoine Mas       #+#    #+#             */
-/*   Updated: 2025/03/12 13:12:18 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/12 14:24:47 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 // *                                                                        * //
 // ************************************************************************** //
 
-#include <asm/except.h>
 #include <asm/idt.h>
+#include <asm/pic.h>
 #include <asm/io.h>
 #include <kfs/kernel.h>
 #include <kfs/types.h>
@@ -48,24 +48,13 @@ extern void	irq15(void);
 
 // ************************************************************************** //
 // *                                                                        * //
-// * Helpers                                                                * //
-// *                                                                        * //
-// ************************************************************************** //
-
-static
-void	irq_remap(void);
-
-// ************************************************************************** //
-// *                                                                        * //
 // * Globals                                                                * //
 // *                                                                        * //
 // ************************************************************************** //
 
-static
-void	*irq_routines[16] = {0};
+static void	*irq_routines[16] = {0};
 
-static
-void	*isr_routines[256] = {0};
+static void	*isr_routines[256] = {0};
 
 // ************************************************************************** //
 // *                                                                        * //
@@ -93,9 +82,9 @@ void	isr_uninstall_handler(int isr)
 	isr_routines[isr] = NULL;
 }
 
-void	irq_install(void)
+void	install_irq(void)
 {
-	irq_remap();
+	remap_pic(0x20, 0x28);
 
 	idt_set_gate(32 +  0, irq0 , 0x08, IDT_INT_GATE);
 	idt_set_gate(32 +  1, irq1 , 0x08, IDT_INT_GATE);
@@ -115,7 +104,7 @@ void	irq_install(void)
 	idt_set_gate(32 + 15, irq15, 0x08, IDT_INT_GATE);
 }
 
-void	isr_handler(interrupt_stack_frame_t stack_frame)
+void	isr_handler(interrupt_stack_frame_s stack_frame)
 {
 	exception_handler_t	handler;
 
@@ -124,7 +113,7 @@ void	isr_handler(interrupt_stack_frame_t stack_frame)
 		handler(&stack_frame);
 }
 
-void	irq_handler(interrupt_stack_frame_t stack_frame)
+void	irq_handler(interrupt_stack_frame_s stack_frame)
 {
 	exception_handler_t	handler;
 
@@ -137,32 +126,4 @@ void	irq_handler(interrupt_stack_frame_t stack_frame)
 	if (stack_frame.intnum >= 40)
 		outb(0x20, PIC2_COMMAND);
 	outb(0x20, PIC1_COMMAND);
-}
-
-// ************************************************************************** //
-// *                                                                        * //
-// * Helper definitions                                                     * //
-// *                                                                        * //
-// ************************************************************************** //
-
-static
-void	irq_remap(void)
-{
-	// Starts the initialization sequence (in cascade mode)
-	outb_p(ICW1_INIT | ICW1_ICW4, PIC1_COMMAND);
-	outb_p(ICW1_INIT | ICW1_ICW4, PIC2_COMMAND);
-	outb_p(0x20, PIC1_DATA);
-	outb_p(0x28, PIC2_DATA);
-	// Tell Master PIC that there is a slave PIC at IRQ2 (0000 0100)
-	outb_p(4, PIC1_DATA);
-	// Tell Slave PIC its cascade identity (0000 0010)
-	outb_p(2, PIC2_DATA);
-
-	// Have the PICs use 8086 mode (and not 8080 mode)
-	outb(ICW4_8086, PIC1_DATA);
-	outb(ICW4_8086, PIC2_DATA);
-
-	// Unmask both PICs.
-	outb(0, PIC1_DATA);
-	outb(0, PIC2_DATA);
 }

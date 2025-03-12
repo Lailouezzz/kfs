@@ -1,32 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   types.h                                            :+:      :+:    :+:   */
+/*   compiler.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 19:28:11 by ale-boud          #+#    #+#             */
-/*   Updated: 2025/03/12 14:20:54 by ale-boud         ###   ########.fr       */
+/*   Created: 2025/03/12 13:06:52 by ale-boud          #+#    #+#             */
+/*   Updated: 2025/03/12 13:09:22 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef  ASM_TYPES_H
-# define ASM_TYPES_H
+#ifndef  KFS_COMPILER_H
+# define KFS_COMPILER_H
 
 # ifndef __ASSEMBLY__
 
-typedef char				i8;
-typedef short				i16;
-typedef int					i32;
-typedef long int			i64;
-
-typedef unsigned char		u8;
-typedef unsigned short		u16;
-typedef unsigned int		u32;
-typedef unsigned long int	u64;
-
-typedef u32					uaddr;
-typedef u32					usize;
+#  define PACKED __attribute__((packed))
+#  define USED __attribute__((used))
+#  define SECTION(__s) __attribute__((section(__s)))
+#  define ALWAYS_INLINE __attribute__((always_inline))
 
 # endif // ifndef __ASSEMBLY__
 
