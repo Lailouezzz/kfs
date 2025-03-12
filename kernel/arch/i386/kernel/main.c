@@ -1,24 +1,22 @@
 #include <multiboot2.h>
 
-#include <kfs/vga.h>
-#include <kfs/kernel.h>
 #include <asm/idt.h>
 #include <asm/io.h>
-#include <asm/ps2.h>
+#include <asm/irq.h>
 #include <asm/keyboard.h>
 #include <asm/mouse.h>
+#include <asm/ptrace.h>
+#include <asm/ps2.h>
+#include <kfs/vga.h>
+#include <kfs/kernel.h>
 
-extern
-void	init_gdt(void);
+extern void	init_gdt(void);
 
-static
-void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic);
+static void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic);
 
-static
-void	keyboard_callback(keyboard_event_t event);
+static void	keyboard_callback(keyboard_event_t event);
 
-static
-void	mouse_callback(mouse_t mouse);
+static void	mouse_callback(mouse_t mouse);
 
 /**
  * @brief The arch main entry in the higher half
@@ -30,12 +28,15 @@ void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 {
 	init_gdt();
 	init_idt();
+	init_irq();
+
+	vga_setup();
+
+	printk("%11c %11c | ", ' ', ' ');
+	vga_print_string_c("   \n", 0x80);
 
 	check_multiboot(mb_info, magic);
 
-	vga_setup();
-	printk("%11c %11c | ", ' ', ' ');
-	vga_print_string_c("   \n", 0x80);
 	init_ps2();
 
 	keyboard_set_callback(keyboard_callback);
@@ -46,16 +47,10 @@ void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 	printk("Welcome to KFS !\n");
 }
 
-static
-void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic)
+static void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic)
 {
-	interrupt_stack_frame_t	s = {0};
-
 	if (magic != MULTIBOOT2_BOOTLOADER_MAGIC)
-	{
-		DUMP_STACK_FRAME(s);
-		panic(s, "No multiboot 2 header present (%x)", magic);
-	}
+		panic("No multiboot 2 header present (%x)", magic);
 
 	FOREACH_MULTIBOOT_TAG(tag, mb_info)
 	{
@@ -66,10 +61,10 @@ void	check_multiboot(struct multiboot_info *mb_info, unsigned int magic)
 
 			printk("upper memory size : %d\nlower memory size : %d\n",
 				meminfo->mem_lower, meminfo->mem_upper);
-			break;
+			break ;
 
 		default:
-			break;
+			break ;
 		}
 	}
 }

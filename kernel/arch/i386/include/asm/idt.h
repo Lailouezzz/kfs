@@ -3,26 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   idt.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:19:39 by Antoine Mas       #+#    #+#             */
-/*   Updated: 2025/03/11 20:45:01 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/12 19:11:47 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef  ASM_IDT_H
 # define ASM_IDT_H
 
-# include <asm/except.h>
+# include <kfs/compiler.h>
+
 # include <asm/types.h>
 # include <asm/memory.h>
 
 # define IDT_INT_GATE 0x8E
 # define IDT_TRAP_GATE 0xEF
-# define IDT_ENTRIES_NUM 256
+# define IDT_ENTRIES_NR 256
 
-#define IDT_ENTRY(off, attr, sel)						\
-	(idt_entry_t)										\
+# define IDT_ENTRY(off, attr, sel)						\
+	(idt_entry_s)										\
 	{													\
 		.offset_1 = ((uaddr)(off)) & 0xFFFF,			\
 		.offset_2 = (((uaddr)(off)) >> 16) & 0xFFFF,	\
@@ -39,22 +40,36 @@ typedef struct
 	u8	zero;            // unused, set to 0
 	u8	type_attributes; // gate type, dpl, and p fields
 	u16	offset_2;        // offset bits 16..31
-}	__PACKED__ idt_entry_t;
+}	PACKED idt_entry_s;
 
 typedef struct
 {
 	u16			size;
-	idt_entry_t	*offset;
-}	__PACKED__ idt_pointer_t;
+	idt_entry_s	*offset;
+}	PACKED idt_pointer_s;
 
-extern
-idt_entry_t		idt_entries[IDT_ENTRIES_NUM];
-
-extern
-idt_pointer_t	idt_pointer;
+extern idt_entry_s		idt_entries[IDT_ENTRIES_NR];
+extern idt_pointer_s	idt_pointer;
 
 void	init_idt(void);
 
-void	idt_set_gate(u8 number, void *addr, u8 sel, u16 attr);
+static inline void ALWAYS_INLINE	idt_set_gate(
+										u8 number,
+										void *addr,
+										u16 attr
+									)
+{
+	idt_entries[number] = IDT_ENTRY(addr, attr, 0x08);
+}
+
+static inline void ALWAYS_INLINE	load_idt(void)
+{
+	__asm__ volatile(
+		"lidt (%0)"
+		:
+		: "r" (&idt_pointer)
+		:
+	);
+}
 
 #endif

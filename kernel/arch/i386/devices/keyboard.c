@@ -6,7 +6,7 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 15:22:51 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/12 18:25:02 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/12 19:40:52 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,10 @@
 // *                                                                        * //
 // ************************************************************************** //
 
+#include <asm/irq.h>
 #include <asm/keyboard.h>
-#include <asm/types.h>
 #include <asm/ps2.h>
+#include <asm/types.h>
 #include <kfs/kernel.h>
 
 // ************************************************************************** //
@@ -35,9 +36,7 @@
 // *                                                                        * //
 // ************************************************************************** //
 
-static void	_handler(
-				interrupt_stack_frame_t *stack_frame
-				);
+static void	_handler(unsigned int n, int_regs_s *regs);
 
 static int	_process_byte(
 				keyboard_context_t* ctx,
@@ -141,7 +140,7 @@ void init_keyboard(u32 _device)
 		.super = 0,
 		.control = 0
 	};
-	irq_install_handler(1, _handler);
+	request_irq(1, _handler);
 
 	// Get the current scancode set
 	ps2_write_device(device, KBD_SSC_CMD);
@@ -174,11 +173,12 @@ int	keyboard_is_key_pressed(u32 keycode)
 // ************************************************************************** //
 
 static
-void	_handler(interrupt_stack_frame_t *stack_frame)
+void	_handler(unsigned int n, int_regs_s *regs)
 {
 	u8	sc;
 
-	(void)(stack_frame);
+	UNUSED(n);
+	UNUSED(regs);
 	sc = ps2_read(PS2_DATA);
 	if (!_process_byte(&context, sc, &next_event))
 		return ; // We're in the middle of a scancode

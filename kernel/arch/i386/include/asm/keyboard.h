@@ -6,7 +6,7 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 15:23:20 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/12 17:57:23 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/12 19:38:29 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define KEYBOARD_H
 
 # include <asm/except.h>
+# include <asm/types.h>
 
 // "SSC" means "Scan Code Set" here, i.e. the set of bytes corresponding to
 // physical keyboard keys.

@@ -6,7 +6,7 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 18:00:15 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/12 18:25:26 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/12 19:42:18 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <asm/ps2.h>
 #include <asm/mouse.h>
 #include <asm/idt.h>
+#include <asm/irq.h>
 #include <kfs/kernel.h>
 
 // ************************************************************************** //
@@ -36,7 +37,7 @@
 // ************************************************************************** //
 
 static void	_handle_packet(void);
-static void	_handle_interrupt(interrupt_stack_frame_t *stack_frame);
+static void	_handle_interrupt(unsigned int n, int_regs_s *regs);
 static void	_set_sample_rate(u8 rate);
 static void	_set_resolution(u8 level);
 static void	_set_scaling(int enabled);
@@ -66,7 +67,7 @@ void	init_mouse(u32 _device)
 {
 	LOG("Initializing %d", _device);
 	device = _device;
-	irq_install_handler(12, _handle_interrupt);
+	request_irq(12, _handle_interrupt);
 
 	// Enable features
 	_enable_scroll_wheel();
@@ -113,11 +114,12 @@ int	mouse_right_button(void)
 // Receives one byte from the mouse and packages it in `packet`. Once that
 // packet is full, calls `_handle_packet`.
 static
-void	_handle_interrupt(interrupt_stack_frame_t* frame)
+void	_handle_interrupt(unsigned int n, int_regs_s *regs)
 {
 	u8	byte;
 
-	(void)(frame);
+	UNUSED(n);
+	UNUSED(regs);
 	byte = ps2_read(PS2_DATA);
 
 	// Try to stay synchronized by discarding obviously out of place bytes
