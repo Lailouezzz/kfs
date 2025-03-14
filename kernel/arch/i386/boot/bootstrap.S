@@ -39,10 +39,14 @@ _1:
 bootstrap_pde:
 	.long 128 + 3
 	.long 128 + 3 + 0x00400000
-	.skip 766 * 4
+	.rept 766
+	.long 0
+	.endr
 	.long 128 + 3
 	.long 128 + 3 + 0x00400000
-	.skip 254 * 4
+	.rept 254
+	.long 0
+	.endr
 
 .section .bss
 .align 16
