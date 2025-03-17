@@ -6,7 +6,7 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 17:53:35 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/12 18:23:10 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/16 19:41:22 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct
 	int		left_pressed;
 	int		right_pressed;
 	int		middle_pressed;
+	int		scroll_wheel_offset;
 }	mouse_t;
 
 typedef void (*mouse_callback_t)(mouse_t);
@@ -50,3 +51,4 @@ int		mouse_get_x(void);
 int		mouse_get_y(void);
 int		mouse_left_button(void);
 int		mouse_right_button(void);
+void	mouse_reset_state(void);

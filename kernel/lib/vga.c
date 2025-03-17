@@ -6,7 +6,7 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 18:56:25 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/12 17:16:26 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/17 00:06:53 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@
 // *                                                                        * //
 // ************************************************************************** //
 
-static unsigned char	cx = 0;
-static unsigned char	cy = 0;
 static int				text_mode = 0;
 static unsigned short	*video;
 
@@ -63,7 +61,7 @@ void	get_video_address(void);
 // *                                                                        * //
 // ************************************************************************** //
 
-void	vga_setup(void)
+void	init_vga(void)
 {
 	get_video_address();
 	vga_clear_screen();
@@ -80,24 +78,12 @@ void	vga_move_cursor(
 	if (x >= WIDTH) x = WIDTH - 1;
 	if (y >= HEIGHT) y = HEIGHT - 1;
 
-	cx = x;
-	cy = y;
-
 	unsigned short pos = y * WIDTH + x;
 
 	outb(0x0F, 0x3D4);
 	outb((unsigned char) (pos & 0xFF), 0x3D5);
 	outb(0x0E, 0x3D4);
 	outb((unsigned char) ((pos >> 8) & 0xFF), 0x3D5);
-}
-
-void	vga_get_cursor(
-			int *x,
-			int *y
-		)
-{
-	*x = cx;
-	*y = cy;
 }
 
 void	vga_clear_screen(void)
@@ -118,91 +104,39 @@ void	vga_enable_cursor(
 	outb((inb(0x3D5) & 0xE0) | cursor_end, 0x3D5);
 }
 
-
-int		vga_print_char_c(
-			char c,
-			int color
-			)
+void	vga_scroll_down(void)
 {
-	if (c != '\n')
-		video[cx++ + WIDTH * cy] = ((color & 0xff) << 8) | c;
-	if (cx >= WIDTH || c == '\n')
-	{
-		cx = 0;
-		++cy;
-	}
-	if (cy >= HEIGHT)
-	{
-		// Scroll
-		cy = HEIGHT - 1;
-		memmove(&video[0], &video[WIDTH], WIDTH * (HEIGHT - 1) * sizeof(u16));
-		for (int k = WIDTH * (HEIGHT - 1); k < WIDTH * HEIGHT; ++k)
-			video[k] = 0x0F00;
-	}
-	vga_move_cursor(cx, cy);
-	return (1);
+	memmove(&video[0], &video[WIDTH], WIDTH * (HEIGHT - 1) * sizeof(u16));
+	for (int k = WIDTH * (HEIGHT - 1); k < WIDTH * HEIGHT; ++k)
+		video[k] = 0x0F00;
 }
 
-int		vga_print_string_c(
-			const char *str,
-			int color
-			)
+void	vga_set_vram(usize offset, const u8 *data, usize size)
 {
-	unsigned int	i;
-
-	for (i = 0; str[i]; ++i)
-		vga_print_char_c(str[i], color);
-	return (i);
+	memcpy(((volatile u8 *)video) + offset, data, size);
 }
 
-int		vga_print_hex_c(
-			char v,
-			int color
-			)
+void	vga_set_char_at(u8 x, u8 y, char c)
 {
-	vga_print_string_c(HEX_PREFIX, color);
-	vga_print_char_c(HEX_DIGITS[(v & 0xf0) >> 4], color);
-	vga_print_char_c(HEX_DIGITS[(v & 0x0f) >> 0], color);
-	return (4);
+	u16	cc;
+
+	cc = video[x + WIDTH * y];
+	cc = (cc & 0xFF00) | c;
+	video[x + WIDTH * y] = cc;
 }
 
-int		vga_print_bits_c(
-			char v,
-			int color
-			)
+void	vga_set_color_at(u8 x, u8 y, u8 color)
 {
-	vga_print_string_c(BIN_PREFIX, color);
-	for (int i = 7; i >= 0; --i)
-		vga_print_char_c(BIN_DIGITS[(v >> i) & 1], color);
-	return (10);
+	u16	cc;
+
+	cc = video[x + WIDTH * y];
+	cc = (color << 8) | (cc & 0xFF);
+	video[x + WIDTH * y] = cc;
 }
 
-int		vga_print_char(
-			char c
-			)
+void	vga_set_colored_char_at(u8 x, u8 y, char c, u8 color)
 {
-	return (vga_print_char_c(c, DEFAULT_COLOR));
-}
-
-int		vga_print_string(
-			const char *str
-			)
-{
-	return (vga_print_string_c(str, DEFAULT_COLOR));
-}
-
-int		vga_print_hex(
-			char v
-			)
-{
-	return (vga_print_hex_c(v, DEFAULT_COLOR));
-}
-
-int		vga_print_bits(
-			char v
-			)
-{
-	return (vga_print_bits_c(v, DEFAULT_COLOR));
+	video[x + WIDTH * y] = (color << 8) | c;
 }
 
 // ************************************************************************** //

@@ -6,7 +6,7 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 18:00:15 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/12 19:42:18 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/16 19:41:15 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,13 @@ int	mouse_right_button(void)
 	return (state.right_pressed);
 }
 
+void	mouse_reset_state(void)
+{
+	__asm__("cli");
+	state = (mouse_t){0};
+	__asm__("sti");
+}
+
 // ************************************************************************** //
 // *                                                                        * //
 // * Helper definitions                                                     * //
@@ -139,7 +146,8 @@ int	mouse_states_equal(mouse_t* a, mouse_t* b)
 	return (a->x == b->x && a->y == b->y
 		&& a->left_pressed == b->left_pressed
 		&& a->middle_pressed == b->middle_pressed
-		&& a->right_pressed == b->right_pressed);
+		&& a->right_pressed == b->right_pressed
+		&& a->scroll_wheel_offset == b->scroll_wheel_offset);
 }
 
 static
@@ -150,6 +158,7 @@ void	_handle_packet(void)
 	u32		delta_y;
 	u8		flags;
 	u8		extra;
+	int		wheel_scroll_offset;
 
 	old_state = state;
 	flags = packet[0];
@@ -174,11 +183,19 @@ void	_handle_packet(void)
 		delta_x |= 0xFFFFFF00;
 	if (flags & MOUSE_Y_NEG)
 		delta_y |= 0xFFFFFF00;
+	switch (extra)
+	{
+		// Who has an horizontal scroll wheel ?!
+		case 1: wheel_scroll_offset = 1; break ;
+		case 0xF: wheel_scroll_offset = -1; break ;
+		default: wheel_scroll_offset = 0; break ;
+	}
 	state.left_pressed = flags & MOUSE_LEFT;
 	state.right_pressed = flags & MOUSE_RIGHT;
 	state.middle_pressed = flags & MOUSE_MIDDLE;
 	state.x += delta_x;
 	state.y -= delta_y; // Point the y-axis downward
+	state.scroll_wheel_offset += wheel_scroll_offset;
 
 	if (!mouse_states_equal(&old_state, &state) && callback)
 		callback(state);

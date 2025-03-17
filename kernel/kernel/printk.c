@@ -6,7 +6,7 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:22:18 by Antoine Mas       #+#    #+#             */
-/*   Updated: 2025/03/07 20:23:37 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/16 23:21:59 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,20 @@
 
 #define PRINTK_BUF_SIZE (4096)
 
+static volatile int	(*printk_writer)(const char *) = NULL;
+
 int	vprintk(
 		const char *fmt,
 		va_list args
 		)
 {
-	static char	buf[PRINTK_BUF_SIZE];
+	static char	buf[PRINTK_BUF_SIZE + 1] = {0};
 	int			n;
 
-	n = vsnprintf(buf, PRINTK_BUF_SIZE, fmt, args);
-	vga_print_string(buf);
+	n = 0;
+	vsnprintf(buf, PRINTK_BUF_SIZE, fmt, args);
+	if (printk_writer)
+		n = printk_writer(buf);
 	return (n);
 }
 
@@ -41,4 +45,9 @@ int	printk(
 	n = vprintk(fmt, args);
 	va_end(args);
 	return (n);
+}
+
+void	printk_set_writer(int (*writer)(const char *))
+{
+	printk_writer = writer;
 }

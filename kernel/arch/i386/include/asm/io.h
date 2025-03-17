@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   io.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 18:32:26 by ale-boud          #+#    #+#             */
-/*   Updated: 2025/03/04 18:40:03 by ale-boud         ###   ########.fr       */
+/*   Updated: 2025/03/17 00:11:24 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #  define outb(value,port) \
 	__asm__ ("outb %%al,%%dx"::"a" (value),"d" (port))
 
+#  define outw(value,port) \
+	__asm__ ("outw %%ax,%%dx"::"a" (value),"d" (port))
 
 #  define inb(port) ({ \
 	unsigned char _v; \
