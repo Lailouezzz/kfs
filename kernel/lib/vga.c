@@ -6,7 +6,7 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 18:56:25 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/17 00:06:53 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/17 01:26:11 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void	vga_scroll_down(void)
 
 void	vga_set_vram(usize offset, const u8 *data, usize size)
 {
-	memcpy(((volatile u8 *)video) + offset, data, size);
+	memcpy(((u8 *)video) + offset, data, size);
 }
 
 void	vga_set_char_at(u8 x, u8 y, char c)

@@ -6,7 +6,7 @@
 /*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:22:18 by Antoine Mas       #+#    #+#             */
-/*   Updated: 2025/03/16 23:21:59 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/17 01:26:30 by amassias         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 #define PRINTK_BUF_SIZE (4096)
 
-static volatile int	(*printk_writer)(const char *) = NULL;
+static int	(*volatile printk_writer)(const char *) = NULL;
 
 int	vprintk(
 		const char *fmt,
