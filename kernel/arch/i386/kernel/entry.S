@@ -61,8 +61,13 @@ __irq\vector:
 /*                                                                            */
 /******************************************************************************/
 
+.section .data
+string_aled:
+	.ascii "Hello from syscall %d\n"
+
 .section .text
 .extern default_except_handler
+.extern printk
 .extern do_irq
 
 /******************************************************************************/
@@ -70,6 +75,19 @@ __irq\vector:
 /* Exceptions handler definitions                                             */
 /*                                                                            */
 /******************************************************************************/
+
+.global syscall_stub
+syscall_stub:
+	// int 0x80 eax = syscall id
+	cli
+	SAVE_ALL
+	push %eax
+	push $string_aled
+	call printk
+	addl $0x8, %esp
+	RESTORE_ALL
+	sti
+	iret
 
 except_common:
 	cli

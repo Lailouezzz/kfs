@@ -3,16 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   idt.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: Antoine Massias <massias.antoine.pro@gm    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:24:15 by Antoine Mas       #+#    #+#             */
-/*   Updated: 2025/03/12 19:12:32 by ale-boud         ###   ########.fr       */
+/*   Updated: 2025/03/17 13:09:43 by Antoine Mas      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <asm/idt.h>
+#include <asm/irq.h>
 
 extern void	*const except_handler_table[32];
+
+extern void	syscall_stub(void);
 
 /* Define the IDT */
 
@@ -32,6 +35,7 @@ void	init_idt(void)
 	for (usize i = 5;
 		i < sizeof(except_handler_table) / sizeof(*except_handler_table); ++i)
 		idt_set_gate(i, except_handler_table[i], IDT_INT_GATE);
+	idt_set_gate(SYSCALL_VECTOR, syscall_stub, IDT_TRAP_GATE);
 
 	load_idt();
 }

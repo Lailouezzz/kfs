@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
+/*   By: Antoine Massias <massias.antoine.pro@gm    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 21:56:25 by ale-boud          #+#    #+#             */
-/*   Updated: 2025/03/17 01:02:38 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/17 17:29:13 by Antoine Mas      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,12 @@ void	arch_main(struct multiboot_info *mb_info, unsigned int magic)
 	init_ps2();
 	__asm__("sti");
 	printk("Welcome to KFS !\n");
+	__asm__ volatile (
+		"push %eax;"
+		"mov $7, %eax;"
+		"int $0x80;"
+		"pop %eax"
+	);
 	start_shell();
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   idt.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: Antoine Massias <massias.antoine.pro@gm    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:19:39 by Antoine Mas       #+#    #+#             */
-/*   Updated: 2025/03/12 19:11:47 by ale-boud         ###   ########.fr       */
+/*   Updated: 2025/03/17 13:23:38 by Antoine Mas      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <asm/memory.h>
 
 # define IDT_INT_GATE 0x8E
-# define IDT_TRAP_GATE 0xEF
+# define IDT_TRAP_GATE 0x8F
 # define IDT_ENTRIES_NR 256
 
 # define IDT_ENTRY(off, attr, sel)						\
