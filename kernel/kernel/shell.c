@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amassias <massias.antoine.pro@gmail.com    +#+  +:+       +#+        */
+/*   By: Antoine Massias <massias.antoine.pro@gm    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 23:43:24 by amassias          #+#    #+#             */
-/*   Updated: 2025/03/17 01:18:58 by amassias         ###   ########.fr       */
+/*   Updated: 2025/03/17 17:36:33 by Antoine Mas      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ void	print_memory(void)
 	entry = mmap->entries;
 	printk(" %21s | %21s | %9s\n", "addr", "len", "type");
 	printk("-----------------------+-----------------------+-----------\n");
-	for (i = 0; i < mmap->size; i += mmap->entry_size, ++entry)
+	for (i = 0; i < mmap->size - sizeof(*mmap); i += mmap->entry_size, ++entry)
 		printk(" %21llx | %21llu | %9s\n",
 			entry->addr,
 			entry->len,
