@@ -1,3 +1,5 @@
 Makefile.cfg
 iso/
 kfsos.iso
+build-toolchain
+cross
