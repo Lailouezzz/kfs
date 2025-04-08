@@ -1,0 +1,15 @@
+{
+	"terminal.integrated.defaultProfile.linux": "kfs (bash)",
+	"terminal.integrated.profiles.linux": {
+		"kfs (bash)": {
+			"path": "__TEMPLATE_SHELL_PATH__",
+			"args": [
+				"--rcfile", "__TEMPLATE_KFS_ROOT__/env/.bashrc",
+				"-i"
+			],
+			"env": {
+				"BASH_ENV": "__TEMPLATE_KFS_ROOT__/env/.bashenv"
+			}
+		}
+	}
+}

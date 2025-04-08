@@ -1,13 +1,22 @@
 {
-	// See https://go.microsoft.com/fwlink/?LinkId=733558
-	// for the documentation about the tasks.json format
 	"version": "2.0.0",
 	"tasks": [
 		{
 			"label": "run-qemu-debug",
 			"type": "shell",
+			"options": {
+				"shell": {
+					"executable": "__TEMPLATE_SHELL_PATH__",
+					"args": [
+						"-c"
+					]
+				},
+				"env": {
+					"ZDOTDIR": "__TEMPLATE_KFS_ROOT__/env"
+				},
+			},
 			"isBackground": true,
-			"command": "make re && make run-qemu-debug",
+			"command": "make run-qemu-debug",
 			"problemMatcher": [
 				{
 					"pattern": [

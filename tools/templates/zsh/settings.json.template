@@ -1,0 +1,14 @@
+{
+	"terminal.integrated.defaultProfile.linux": "kfs (zsh)",
+	"terminal.integrated.profiles.linux": {
+		"kfs (zsh)": {
+			"path": "__TEMPLATE_SHELL_PATH__",
+			"args": [
+				"-i",
+			],
+			"env": {
+				"ZDOTDIR": "__TEMPLATE_KFS_ROOT__/env"
+			}
+		}
+	}
+}

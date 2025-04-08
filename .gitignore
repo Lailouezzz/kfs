@@ -3,3 +3,5 @@ iso/
 kfsos.iso
 build-toolchain
 cross
+/env
+

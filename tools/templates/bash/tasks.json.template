@@ -1,0 +1,40 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "run-qemu-debug",
+			"type": "shell",
+			"options": {
+				"shell": {
+					"executable": "__TEMPLATE_SHELL_PATH__",
+					"args": [
+						"--rcfile", "__TEMPLATE_KFS_ROOT__/env/.bashrc",
+						"-c"
+					]
+				},
+				"env": {
+					"BASH_ENV": "__TEMPLATE_KFS_ROOT__/env/.bashenv"
+				},
+			},
+			"isBackground": true,
+			"command": "make run-qemu-debug",
+			"problemMatcher": [
+				{
+					"pattern": [
+						{
+							"regexp": ".",
+							"file": 1,
+							"location": 2,
+							"message": 3
+						}
+				],
+					"background": {
+						"activeOnStart": true,
+						"beginsPattern": ".",
+						"endsPattern": ".",
+					}
+				}
+			]
+		}
+	]
+}

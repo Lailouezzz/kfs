@@ -1,0 +1,7 @@
+if [ -f __TEMPLATE_OLD_ZDOTDIR__/.zshrc ]; then
+  ZDOTDIR='__TEMPLATE_OLD_ZDOTDIR__' source '__TEMPLATE_OLD_ZDOTDIR__/.zshrc'
+elif [ -f $HOME/.zshrc ]; then
+  ZDOTDIR="$HOME/.zshrc" source "$HOME/.zshrc/.zshrc"
+fi
+
+source '__TEMPLATE_KFS_ROOT__/env/env'
